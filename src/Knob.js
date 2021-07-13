@@ -26,6 +26,7 @@ export const Knob = ({
     children,
     steps,
     snap = false,
+    readOnly = false,
     ariaValueText,
     ariaLabelledBy,
     className,
@@ -70,11 +71,11 @@ export const Knob = ({
             aria-valuenow={value}
             aria-valuetext={ariaValueText}
             aria-labelledby={ariaLabelledBy}
-            onKeyDown={onKeyDown}
-            onWheel={onScroll}
+            onKeyDown={readOnly ? null : onKeyDown}
+            onWheel={readOnly ? null : onScroll}
             className={className}
         >
-            <svg onMouseDown={onMouseDown2} onMouseUp={onMouseUp2} width={size} height={size} ref={svg}>
+            <svg onMouseDown={readOnly ? null : onMouseDown2} onMouseUp={readOnly ? null : onMouseUp2} width={size} height={size} ref={svg}>
                 {React.Children.map(children, child =>
                     isInternalComponent(child)
                         ? React.cloneElement(child, {

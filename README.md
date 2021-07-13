@@ -83,6 +83,11 @@ Callback that will pass the event when user press the mouse button over the knob
 ##### `onMouseDown`
 Callback that will pass the event when user release the mouse button over the knob.
 
+##### `readOnly`
+Indicates if the knob is editable.
+If true the knob do not react to user input
+Default is `false`.
+
 ##### `size`
 Width and height of the knob in `px`
 

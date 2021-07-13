@@ -3,9 +3,9 @@ import Example from "../Example";
 import { Knob, Pointer } from "../lib";
 
 const example = `
-<Knob 
-  size={100}  
-  angleOffset={220} 
+<Knob
+  size={100}
+  angleOffset={220}
   angleRange={280}
   min={0}
   max={100}
@@ -14,7 +14,7 @@ const example = `
   onMouseUp={e => console.log("mouse up")}
 >
 <circle r="40" cx="50" cy="50" fill="#FC5A96" />
-<Pointer 
+<Pointer
     width={5}
     height={30}
     radius={10}

@@ -21,6 +21,8 @@ export const Knob = ({
     angleRange = 360,
     size,
     onChange = () => {},
+    onMouseDown = () => {},
+    onMouseUp = () => {},
     children,
     steps,
     snap = false,
@@ -47,13 +49,15 @@ export const Knob = ({
         onChange,
     })
 
-    const onMouseDown = e => {
+    const onMouseDown2 = e => {
+        onMouseDown(e);
         onStart(e);
         e.target.setCapture();
     }
 
-    const onMouseUp = e => {
+    const onMouseUp2 = e => {
         e.target.releaseCapture();
+        onMouseUp(e);
     }
 
     return (
@@ -70,7 +74,7 @@ export const Knob = ({
             onWheel={onScroll}
             className={className}
         >
-            <svg onMouseDown={onMouseDown} onMouseUp={onMouseUp} width={size} height={size} ref={svg}>
+            <svg onMouseDown={onMouseDown2} onMouseUp={onMouseUp2} width={size} height={size} ref={svg}>
                 {React.Children.map(children, child =>
                     isInternalComponent(child)
                         ? React.cloneElement(child, {

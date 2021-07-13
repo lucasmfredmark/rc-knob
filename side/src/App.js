@@ -14,6 +14,8 @@ import ScaleCustom from './examples/Scale_custom'
 import ScaleStyled from './examples/Scale_styled'
 import ScaleStyled2 from './examples/Scale_styled_2'
 import ArcPointerStyled from './examples/Arc_Pointer_styled'
+import MouseInteraction from "./examples/MouseInteraction";
+
 import Filter from './filter'
 
 export default () => (
@@ -61,6 +63,12 @@ export default () => (
         <Grid>
             <PointerCustom />
             <ScaleCustom />
+        </Grid>
+        <H2>
+            <span>Mouse Interaction</span>
+        </H2>
+        <Grid>
+            <MouseInteraction />
         </Grid>
         <H2>
             <span>Styles</span>

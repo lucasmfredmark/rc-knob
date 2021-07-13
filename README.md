@@ -77,6 +77,12 @@ Min value of the knob.
 ##### `onChange`
 Callback that will pass the value when user interact with the knob.
 
+##### `onMouseUp`
+Callback that will pass the event when user press the mouse button over the knob.
+
+##### `onMouseDown`
+Callback that will pass the event when user release the mouse button over the knob.
+
 ##### `size`
 Width and height of the knob in `px`
 

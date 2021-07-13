@@ -1,4 +1,4 @@
-import { clamp, caclulatePercentage } from '../src/utils'
+import { clamp, caclulatePercentage, findClosest } from '../src/utils'
 
 describe('utils', () => {
     it('clamp value', () => {
@@ -29,6 +29,21 @@ describe('utils', () => {
                 angleRange: 90,
             })
             expect(result).toBe(1)
+        })
+    })
+
+    describe('findClosest', () => {
+        it('Value part of the list', () => {
+            const result = findClosest([0,1,2,3], 2)
+            expect(result).toBe(2)
+        })
+        it('Value not part of the list', () => {
+            const result = findClosest([0,1,2,3], 1.1)
+            expect(result).toBe(1)
+        })
+        it('List is empty', () => {
+            const result = findClosest([], 1.1)
+            expect(result).toBe(undefined)
         })
     })
 })

@@ -21,15 +21,14 @@ export const caclulatePercentage = ({
 }
 
 export const findClosest = (values, value) => {
-    var result, lastDelta
-
-    values.some(item => {
+    let result
+    let lastDelta = Infinity
+    values.forEach(item => {
         const delta = Math.abs(value - item)
-        if (delta >= lastDelta) {
-            return true
+        if (delta < lastDelta) {
+            result = item
+            lastDelta = delta
         }
-        result = item
-        lastDelta = delta
     })
     return result
 }

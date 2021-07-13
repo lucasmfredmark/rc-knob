@@ -1,6 +1,6 @@
 import React from 'react'
-import Example from '../Example'
-import colors from '../colors'
+import Example from "../Example";
+
 import { Scale, Pointer } from '../lib'
 
 const example = `

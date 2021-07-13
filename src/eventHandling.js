@@ -36,8 +36,8 @@ const removeEventFromBody = (name, fn) =>
     document.body.removeEventListener(name, fn)
 
 export const handleEventListener = ({ dispatch, isActive }) => () => {
-    const onMove = ({ pageX, pageY }) =>
-        dispatch({ pageX, pageY, type: 'MOVE' })
+    const onMove = ({ clientX, clientY }) =>
+        dispatch({ clientX, clientY, type: 'MOVE' })
     const onStop = () => dispatch({ type: 'STOP' })
     if (isActive) {
         addEventToBody('mousemove', onMove)

@@ -3,13 +3,13 @@ export const clamp = (min, max, value) => Math.max(min, Math.min(max, value))
 export const caclulatePercentage = ({
     startX,
     startY,
-    pageX,
-    pageY,
+    clientX,
+    clientY,
     angleOffset,
     angleRange,
 }) => {
-    const x = startX - pageX
-    const y = startY - pageY
+    const x = startX - clientX
+    const y = startY - clientY
     const degree = (Math.atan2(-y, -x) * 180) / Math.PI + 90 - angleOffset
     const angle = degree < 0 ? degree + 360 : degree % 360
 

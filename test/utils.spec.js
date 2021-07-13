@@ -12,8 +12,8 @@ describe('utils', () => {
             const result = caclulatePercentage({
                 startX: 0,
                 startY: 0,
-                pageX: 0,
-                pageY: 10,
+                clientX: 0,
+                clientY: 10,
                 angleOffset: 0,
                 angleRange: 360,
             })
@@ -23,8 +23,8 @@ describe('utils', () => {
             const result = caclulatePercentage({
                 startX: 0,
                 startY: 0,
-                pageX: 0,
-                pageY: 10,
+                clientX: 0,
+                clientY: 10,
                 angleOffset: 0,
                 angleRange: 90,
             })

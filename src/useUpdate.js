@@ -69,7 +69,6 @@ export default ({
     angleRange = 360,
     size,
     steps,
-    snap,
     onChange,
 }) => {
     const svg = useRef()

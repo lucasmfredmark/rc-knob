@@ -121,12 +121,12 @@ var clamp = function clamp(min, max, value) {
 var caclulatePercentage = function caclulatePercentage(_ref) {
   var startX = _ref.startX,
       startY = _ref.startY,
-      pageX = _ref.pageX,
-      pageY = _ref.pageY,
+      clientX = _ref.clientX,
+      clientY = _ref.clientY,
       angleOffset = _ref.angleOffset,
       angleRange = _ref.angleRange;
-  var x = startX - pageX;
-  var y = startY - pageY;
+  var x = startX - clientX;
+  var y = startY - clientY;
   var degree = Math.atan2(-y, -x) * 180 / Math.PI + 90 - angleOffset;
   var angle = degree < 0 ? degree + 360 : degree % 360;
 
@@ -224,11 +224,11 @@ var handleEventListener = function handleEventListener(_ref) {
       isActive = _ref.isActive;
   return function () {
     var onMove = function onMove(_ref2) {
-      var pageX = _ref2.pageX,
-          pageY = _ref2.pageY;
+      var clientX = _ref2.clientX,
+          clientY = _ref2.clientY;
       return dispatch({
-        pageX: pageX,
-        pageY: pageY,
+        clientX: clientX,
+        clientY: clientY,
         type: 'MOVE'
       });
     };

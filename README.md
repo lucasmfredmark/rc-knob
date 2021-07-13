@@ -1,4 +1,4 @@
-# rc-knobs
+# rc-knob
 
 Renders a react knob component that can be widely customised.
 

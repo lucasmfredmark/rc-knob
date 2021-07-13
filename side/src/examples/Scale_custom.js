@@ -1,6 +1,7 @@
 import React from 'react'
 import Example from '../Example'
-import { Scale } from 'rc-knob'
+import { Scale } from "../lib";
+
 
 const example = `
 const customScaleTick = ({

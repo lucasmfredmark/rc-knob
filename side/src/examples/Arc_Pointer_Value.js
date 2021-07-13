@@ -1,7 +1,8 @@
 import React from 'react'
 import Example from '../Example'
 import colors from '../colors'
-import { Arc, Pointer, Value } from 'rc-knob'
+import { Arc, Pointer, Value } from "../lib";
+
 
 const example = `
 <Knob 

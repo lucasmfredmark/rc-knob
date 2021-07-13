@@ -59,6 +59,7 @@ export default () => (
                 color={colors.primary}
             />,
             <Pointer
+                key="pointer"
                 width={1}
                 height={5}
                 radius={40}

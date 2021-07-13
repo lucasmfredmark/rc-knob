@@ -41,7 +41,7 @@ export default () => (
         example={example}
         knob={[
             <Arc key="arc" arcWidth={5} color={colors.primary} radius={47.5} />,
-            <Pointer width={3} height={40} radius={0} color={colors.primary}>
+            <Pointer key="pointer" width={3} height={40} radius={0} color={colors.primary}>
                 <CustomPointer />
             </Pointer>,
         ]}

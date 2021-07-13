@@ -73,6 +73,7 @@ export default () => (
         example={example}
         knob={[
             <Scale
+                key="scale"
                 tickWidth={5}
                 tickHeight={15}
                 radius={45}
@@ -81,13 +82,14 @@ export default () => (
                 activeClassName="activeScale"
             />,
             <Pointer
+                key="pointer"
                 width={5}
                 height={15}
                 radius={25}
                 type="circle"
                 className="pointer"
             />,
-            <filter id="filter2">
+            <filter key="filter" id="filter2">
                 <feGaussianBlur
                     in="SourceGraphic"
                     stdDeviation="5"

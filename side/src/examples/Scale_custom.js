@@ -77,6 +77,7 @@ export default () => (
         example={example}
         knob={[
             <Scale
+                key="scale"
                 steps={40}
                 tickWidth={1}
                 tickHeight={5}

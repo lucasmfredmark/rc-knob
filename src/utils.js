@@ -40,7 +40,10 @@ export const getValueFromPercentage = ({ min, max, percentage }) =>
 export const getPercentageFromValue = ({ min, max, value }) =>
     (value - min) / (max - min)
 
-export const getStartXY = ({ container, size }) => ({
-    startX: Math.floor(container.current.offsetLeft) + size / 2,
-    startY: Math.floor(container.current.offsetTop) + size / 2,
-})
+export const getStartXY = ({ container, size }) => {
+    const rect = container.current.getBoundingClientRect();
+    return {
+        startX: rect.x + size / 2,
+        startY: rect.y + size / 2,
+    }
+}

@@ -16,6 +16,7 @@ import ScaleStyled2 from './examples/Scale_styled_2'
 import ArcPointerStyled from './examples/Arc_Pointer_styled'
 import EventMouse from "./examples/Event_mouse";
 import EventReadOnly from "./examples/Event_readOnly";
+import EventNoWheel from "./examples/Event_nowheel";
 
 
 import Filter from './filter'
@@ -73,6 +74,7 @@ export default () => {
             <Grid>
                 <EventMouse />
                 <EventReadOnly />
+                <EventNoWheel />
             </Grid>
             <H2>
                 <span>Styles</span>

@@ -88,6 +88,12 @@ Indicates if the knob is editable.
 If true the knob do not react to user input
 Default is `false`.
 
+##### `useMouseWheel`
+Indicates if the knob can be edited with the mouse wheel.
+If `true` the knob uses mouse wheel event, and the default wheel event is inhibited.
+Set to `false` can prevent to edit the widget during page scroll.
+Default is `true`.
+
 ##### `size`
 Width and height of the knob in `px`
 

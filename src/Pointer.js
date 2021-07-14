@@ -16,7 +16,7 @@ export const Pointer = ({
     <g
         transform={`
         rotate(${angleOffset + angleRange * percentage} ${center} ${center})
-        translate( ${center - width / 2} ${center - radius - height})
+        translate( ${center} ${center - radius - height})
         `}
     >
         {children &&
@@ -29,6 +29,7 @@ export const Pointer = ({
             )}
         {type === 'rect' && (
             <rect
+                x={-width * 0.5}
                 width={width}
                 height={height}
                 fill={color}

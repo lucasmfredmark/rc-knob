@@ -55,11 +55,9 @@ export const Knob = ({
     const onMouseDown2 = e => {
         onMouseDown(e);
         onStart(e);
-        e.target.setCapture();
     }
 
     const onMouseUp2 = e => {
-        e.target.releaseCapture();
         onMouseUp(e);
     }
 

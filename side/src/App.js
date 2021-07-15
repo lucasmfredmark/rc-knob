@@ -18,6 +18,8 @@ import EventMouse from "./examples/Event_mouse";
 import EventReadOnly from "./examples/Event_readOnly";
 import EventNoWheel from "./examples/Event_nowheel";
 import EventTrackingFalse from "./examples/Event_trackingFalse";
+import AsyncMotor from "./examples/Async_motor";
+import AsyncMotorMultiTurn from "./examples/Async_multiTurn";
 
 
 import Filter from './filter'
@@ -92,6 +94,18 @@ export default () => {
                 <ArcPointerStyled />
                 <ScaleStyled />
                 <ScaleStyled2 />
+            </Grid>
+            <H2>
+                <span>Async example</span>
+            </H2>
+            <Description>
+                Combining the sub components of the knob can be use for
+                asynchronous use case. Displaying both the current position
+                and requested position.
+            </Description>
+            <Grid>
+                <AsyncMotor />
+                <AsyncMotorMultiTurn />
             </Grid>
         </div>
     )

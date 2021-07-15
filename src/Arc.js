@@ -17,14 +17,14 @@ const calcPath = ({
     const angle = angleRange * percentage
     const startAngle = angleOffset - 90
     const innerRadius = outerRadius - arcWidth
-    const startAngleDegree = degTorad(startAngle)
-    const endAngleDegree = degTorad(startAngle + angle)
+    const startAngleRad = degTorad(startAngle)
+    const endAngleRad = degTorad(startAngle + angle)
     const largeArcFlag = angle < 180 ? 0 : 1
 
-    const p1 = pointOnCircle(center, outerRadius, endAngleDegree)
-    const p2 = pointOnCircle(center, outerRadius, startAngleDegree)
-    const p3 = pointOnCircle(center, innerRadius, startAngleDegree)
-    const p4 = pointOnCircle(center, innerRadius, endAngleDegree)
+    const p1 = pointOnCircle(center, outerRadius, endAngleRad)
+    const p2 = pointOnCircle(center, outerRadius, startAngleRad)
+    const p3 = pointOnCircle(center, innerRadius, startAngleRad)
+    const p4 = pointOnCircle(center, innerRadius, endAngleRad)
 
     return `M${p1.x},${
         p1.y

@@ -180,7 +180,9 @@ var DIRECTIONS = {
 };
 var onMouseMoveStart = function onMouseMoveStart(dispatch) {
   return function (e) {
-    return dispatch(_objectSpread({}, e, {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(_objectSpread({}, e, {
       type: 'START'
     }));
   };
@@ -223,12 +225,12 @@ var handleEventListener = function handleEventListener(_ref) {
   var dispatch = _ref.dispatch,
       isActive = _ref.isActive;
   return function () {
-    var onMove = function onMove(_ref2) {
-      var clientX = _ref2.clientX,
-          clientY = _ref2.clientY;
-      return dispatch({
-        clientX: clientX,
-        clientY: clientY,
+    var onMove = function onMove(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dispatch({
+        clientX: e.clientX,
+        clientY: e.clientY,
         type: 'MOVE'
       });
     };
@@ -349,6 +351,17 @@ var useUpdate = (function (_ref3) {
       isActive = _useReducer2$.isActive,
       dispatch = _useReducer2[1];
 
+  React.useEffect(function () {
+    var div = container.current;
+    var onWheel = onScroll(dispatch);
+    var onStart = onMouseMoveStart(dispatch);
+    div.addEventListener("wheel", onWheel);
+    div.addEventListener("mousedown", onStart);
+    return function () {
+      div.removeEventListener("wheel", onWheel);
+      div.removeEventListener("mousedown", onStart);
+    };
+  }, []);
   React.useEffect(handleEventListener({
     dispatch: dispatch,
     isActive: isActive
@@ -359,9 +372,7 @@ var useUpdate = (function (_ref3) {
     percentage: steps ? findClosest(steps, percentage) : percentage,
     value: value,
     angle: angle,
-    onStart: onMouseMoveStart(dispatch),
-    onKeyDown: onKeyDown(dispatch),
-    onScroll: onScroll(dispatch)
+    onKeyDown: onKeyDown(dispatch)
   };
 });
 
@@ -641,20 +652,9 @@ var Knob = function Knob(_ref2) {
   }),
       percentage = _useUpdate.percentage,
       value = _useUpdate.value,
-      onStart = _useUpdate.onStart,
       svg = _useUpdate.svg,
       container = _useUpdate.container,
-      onKeyDown = _useUpdate.onKeyDown,
-      onScroll = _useUpdate.onScroll;
-
-  var onMouseDown = function onMouseDown(e) {
-    onStart(e);
-    e.target.setCapture();
-  };
-
-  var onMouseUp = function onMouseUp(e) {
-    e.target.releaseCapture();
-  };
+      onKeyDown = _useUpdate.onKeyDown;
 
   return React__default.createElement("div", {
     ref: container,
@@ -670,11 +670,8 @@ var Knob = function Knob(_ref2) {
     "aria-valuetext": ariaValueText,
     "aria-labelledby": ariaLabelledBy,
     onKeyDown: onKeyDown,
-    onWheel: onScroll,
     className: className
   }, React__default.createElement("svg", {
-    onMouseDown: onMouseDown,
-    onMouseUp: onMouseUp,
     width: size,
     height: size,
     ref: svg

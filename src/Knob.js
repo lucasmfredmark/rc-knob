@@ -48,11 +48,6 @@ export const Knob = ({
 
     const onMouseDown = e => {
         onStart(e);
-        e.target.setCapture();
-    }
-
-    const onMouseUp = e => {
-        e.target.releaseCapture();
     }
 
     return (
@@ -68,7 +63,7 @@ export const Knob = ({
             onKeyDown={onKeyDown}
             className={className}
         >
-            <svg onMouseDown={onMouseDown} onMouseUp={onMouseUp} width={size} height={size} ref={svg}>
+            <svg onMouseDown={onMouseDown} width={size} height={size} ref={svg}>
                 {React.Children.map(children, child =>
                     isInternalComponent(child)
                         ? React.cloneElement(child, {

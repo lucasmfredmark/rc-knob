@@ -131,6 +131,30 @@ Color of the arc that indicates the value of the knob.
 Outer radius of the arc.
 Will be the knob `size` by default
 
+### `<Range/>`
+Renders a range between 2 angles.
+
+#### Props
+
+##### `arcWidth`
+Width of the range.
+The range will expand to the centre.
+
+##### `color`
+Color of the range.
+
+##### `radius`
+Outer radius of the range.
+Will be the knob `size` by default
+
+##### `percentFrom`
+Starting point of the range.
+If unset, `percent` value of the knob is used.
+
+##### `percentTo`
+Endding point of the range.
+If unset, `percent` value of the knob is used.
+
 ### `<Pointer/>`
 Pointer of the knob.
 Can be either be a SVG `rect` or `circle` depending on the passed `type` prop or any SVG element that is passed as a children.

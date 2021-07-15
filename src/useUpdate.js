@@ -93,9 +93,14 @@ export default ({
     useEffect(() => {
         const div = container.current
         const onWheel = onScroll(dispatch)
+        const onStart = onMouseMoveStart(dispatch)
         div.addEventListener("wheel", onWheel)
-        return () => div.removeEventListener("wheel", onWheel)
-    }, []);
+        div.addEventListener("mousedown", onStart)
+        return () => {
+            div.removeEventListener("wheel", onWheel)
+            div.removeEventListener("mousedown", onStart)
+        }}, []
+    )
 
     useEffect(handleEventListener({ dispatch, isActive }), [isActive])
     return {
@@ -104,7 +109,6 @@ export default ({
         percentage: steps ? findClosest(steps, percentage) : percentage,
         value,
         angle,
-        onStart: onMouseMoveStart(dispatch),
         onKeyDown: onKeyDown(dispatch),
     }
 }

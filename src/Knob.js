@@ -31,7 +31,6 @@ export const Knob = ({
     const {
         percentage,
         value,
-        onStart,
         svg,
         container,
         onKeyDown,
@@ -46,10 +45,6 @@ export const Knob = ({
         onChange,
     })
 
-    const onMouseDown = e => {
-        onStart(e);
-    }
-
     return (
         <div
             ref={container}
@@ -63,7 +58,7 @@ export const Knob = ({
             onKeyDown={onKeyDown}
             className={className}
         >
-            <svg onMouseDown={onMouseDown} width={size} height={size} ref={svg}>
+            <svg width={size} height={size} ref={svg}>
                 {React.Children.map(children, child =>
                     isInternalComponent(child)
                         ? React.cloneElement(child, {

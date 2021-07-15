@@ -5,8 +5,11 @@ const DIRECTIONS = {
     40: -1,
 }
 
-export const onMouseMoveStart = dispatch => e =>
+export const onMouseMoveStart = dispatch => e => {
+    e.preventDefault()
+    e.stopPropagation()
     dispatch({ ...e, type: 'START' })
+}
 
 export const onKeyDown = dispatch => e => {
     const direction = DIRECTIONS[e.keyCode]
@@ -36,8 +39,11 @@ const removeEventFromBody = (name, fn) =>
     document.body.removeEventListener(name, fn)
 
 export const handleEventListener = ({ dispatch, isActive }) => () => {
-    const onMove = ({ clientX, clientY }) =>
-        dispatch({ clientX, clientY, type: 'MOVE' })
+    const onMove = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'MOVE' })
+    }
     const onStop = () => dispatch({ type: 'STOP' })
     if (isActive) {
         addEventToBody('mousemove', onMove)

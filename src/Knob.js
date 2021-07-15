@@ -39,7 +39,6 @@ export const Knob = ({
         svg,
         container,
         onKeyDown,
-        onScroll,
     } = useUpdate({
         min,
         max,
@@ -49,6 +48,8 @@ export const Knob = ({
         size,
         steps: stepsToSnapTo(steps, snap),
         onChange,
+        useMouseWheel,
+        readOnly,
     })
 
     const onMouseDown2 = e => {
@@ -73,7 +74,6 @@ export const Knob = ({
             aria-valuetext={ariaValueText}
             aria-labelledby={ariaLabelledBy}
             onKeyDown={readOnly ? null : onKeyDown}
-            onWheel={readOnly ? null : (useMouseWheel ? onScroll : null)}
             className={className}
         >
             <svg onMouseDown={readOnly ? null : onMouseDown2} onMouseUp={readOnly ? null : onMouseUp2} width={size} height={size} ref={svg}>

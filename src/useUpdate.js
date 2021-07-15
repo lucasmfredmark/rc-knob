@@ -70,6 +70,8 @@ export default ({
     size,
     steps,
     onChange,
+    readOnly,
+    useMouseWheel,
 }) => {
     const svg = useRef()
     const container = useRef()
@@ -89,6 +91,21 @@ export default ({
         }
     )
 
+    if (!readOnly) {
+        useEffect(() => {
+            const div = container.current
+            const onWheel = useMouseWheel ? onScroll(dispatch) : null
+            if (onWheel) {
+                div.addEventListener("wheel", onWheel)
+            }
+            return () => {
+                if (onWheel) {
+	                div.removeEventListener("wheel", onWheel)
+                }
+            }
+        }, [useMouseWheel])
+    }
+
     useEffect(handleEventListener({ dispatch, isActive }), [isActive])
     return {
         svg,
@@ -98,6 +115,5 @@ export default ({
         angle,
         onStart: onMouseMoveStart(dispatch),
         onKeyDown: onKeyDown(dispatch),
-        onScroll: onScroll(dispatch),
     }
 }

@@ -48,12 +48,16 @@ const onChangeByStep = ({ state, action, onChange }) => {
         percentage: getPercentageFromValue({ ...state, value }),
     }
 }
-const reducer = onChange => (state, action) => {
+const reducer = (onChange, onMouseDown, onMouseUp) => (state, action) => {
     switch (action.type) {
         case 'START':
+            onMouseDown()
             return onStart(state)
         case 'MOVE':
             return onMove({ state, action, onChange })
+        case 'STOP':
+            onMouseUp()
+            return { ...state, isActive: false, value: state.value }
         case 'STEPS':
             return onChangeByStep({ state, action, onChange })
         default:
@@ -72,11 +76,13 @@ export default ({
     onChange,
     readOnly,
     useMouseWheel,
+    onMouseDown,
+    onMouseUp,
 }) => {
     const svg = useRef()
     const container = useRef()
     const [{ percentage, value, angle, isActive }, dispatch] = useReducer(
-        reducer(onChange),
+        reducer(onChange, onMouseDown, onMouseUp),
         {
             isActive: false,
             min,
@@ -94,11 +100,14 @@ export default ({
     if (!readOnly) {
         useEffect(() => {
             const div = container.current
+            const onStart = onMouseMoveStart(dispatch)
             const onWheel = useMouseWheel ? onScroll(dispatch) : null
+            div.addEventListener("mousedown", onStart)
             if (onWheel) {
                 div.addEventListener("wheel", onWheel)
             }
             return () => {
+                div.removeEventListener("mousedown", onStart)
                 if (onWheel) {
 	                div.removeEventListener("wheel", onWheel)
                 }
@@ -113,7 +122,6 @@ export default ({
         percentage: steps ? findClosest(steps, percentage) : percentage,
         value,
         angle,
-        onStart: onMouseMoveStart(dispatch),
         onKeyDown: onKeyDown(dispatch),
     }
 }

@@ -90,6 +90,13 @@ export default ({
         }
     )
 
+    useEffect(() => {
+        const div = container.current
+        const onWheel = onScroll(dispatch)
+        div.addEventListener("wheel", onWheel)
+        return () => div.removeEventListener("wheel", onWheel)
+    }, []);
+
     useEffect(handleEventListener({ dispatch, isActive }), [isActive])
     return {
         svg,
@@ -99,6 +106,5 @@ export default ({
         angle,
         onStart: onMouseMoveStart(dispatch),
         onKeyDown: onKeyDown(dispatch),
-        onScroll: onScroll(dispatch),
     }
 }

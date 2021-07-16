@@ -28,6 +28,16 @@ describe('utils', () => {
             })
             expect(result).toEqual({updated:false, percentage: 0, mouseAngle: 0})
         })
+        it('when the new pos is on the other side with big angleOffset', () => {
+            const result = calculatePositionFromMouseAngle({
+                mouseAngle: 90,
+                angleOffset: 270,
+                angleRange: 180,
+                previousPercentage: 0,
+                previousMouseAngle: null,
+            })
+            expect(result).toEqual({updated:true, percentage: 1, mouseAngle: 90})
+        })
         it('when the new pos is far away from the previous angle ', () => {
             const result = calculatePositionFromMouseAngle({
                 mouseAngle: 0,

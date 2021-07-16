@@ -1,6 +1,7 @@
 import { useReducer, useEffect, useRef } from 'react'
 import {
-    caclulateStateFromMousePosition,
+    calculatePositionFromMouseAngle,
+    calculateMouseAngle,
     findClosest,
     getClientCenter,
     getValueFromPercentage,
@@ -16,10 +17,13 @@ import {
 
 const onStart = (state, action) => {
     const center = getClientCenter(state)
-    const position = caclulateStateFromMousePosition({
+    const mouseAngle = calculateMouseAngle({...center, ...action})
+    const position = calculatePositionFromMouseAngle({
         previousMouseAngle: null,
         previousPercentage: null,
-        ...center, ...state, ...action
+        ...state,
+        ...action,
+        mouseAngle,
     })
     return {
         ...state,
@@ -31,11 +35,13 @@ const onStart = (state, action) => {
 
 
 const onMove = ({ state, action, onChange }) => {
-    const position = caclulateStateFromMousePosition({
+    const mouseAngle = calculateMouseAngle({...state, ...action})
+    const position = calculatePositionFromMouseAngle({
         previousMouseAngle: state.mouseAngle,
         previousPercentage: state.percentage,
         ...state,
         ...action,
+        mouseAngle,
     })
     const value = getValueFromPercentage({ ...state, ...position })
 

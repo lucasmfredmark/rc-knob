@@ -1,6 +1,6 @@
 export const clamp = (min, max, value) => Math.max(min, Math.min(max, value))
 
-export const caclulateMouseAngle = ({
+export const calculateMouseAngle = ({
     centerX,
     centerY,
     clientX,
@@ -13,12 +13,15 @@ export const caclulateMouseAngle = ({
     return angle
 }
 
-export const caclulatePercentageFromMouseAngle = ({
+export const calculatePercentageFromMouseAngle = ({
     mouseAngle,
     angleOffset,
     angleRange,
 }) => {
-    const angle = mouseAngle - angleOffset
+    let angle = mouseAngle - angleOffset
+    if (angle < 0) {
+        angle += 360
+    }
     if (angle <= angleRange) {
         return clamp(0, 1, angle / angleRange)
     } else {
@@ -26,11 +29,8 @@ export const caclulatePercentageFromMouseAngle = ({
     }
 }
 
-export const caclulateStateFromMousePosition = ({
-    centerX,
-    centerY,
-    clientX,
-    clientY,
+export const calculatePositionFromMouseAngle = ({
+    mouseAngle,
     multiRotation,
     angleOffset,
     angleRange,
@@ -38,12 +38,6 @@ export const caclulateStateFromMousePosition = ({
     previousPercentage,
     previousMouseAngle,
 }) => {
-    const mouseAngle = caclulateMouseAngle({
-        centerX,
-        centerY,
-        clientX,
-        clientY})
-
     if (previousMouseAngle !== null) {
         // normalize and cancel the interaction if the delta angle is too big
         const deltaAngle = (mouseAngle - previousMouseAngle) % 360
@@ -74,7 +68,7 @@ export const caclulateStateFromMousePosition = ({
         }
     } else {
         if (multiRotation) {
-            const rawPercentage = caclulatePercentageFromMouseAngle({
+            const rawPercentage = calculatePercentageFromMouseAngle({
                 angleOffset,
                 angleRange,
                 mouseAngle,
@@ -87,7 +81,7 @@ export const caclulateStateFromMousePosition = ({
                 percentage: percentage + validDeltaPercent,
             }
         } else {
-            const newPercentage = caclulatePercentageFromMouseAngle({
+            const newPercentage = calculatePercentageFromMouseAngle({
                 angleOffset,
                 angleRange,
                 mouseAngle,
@@ -99,26 +93,6 @@ export const caclulateStateFromMousePosition = ({
             }
         }
     }
-}
-
-export const caclulatePercentage = ({
-    centerX,
-    centerY,
-    clientX,
-    clientY,
-    angleOffset,
-    angleRange,
-}) => {
-    const mouseAngle = caclulateMouseAngle({
-        centerX,
-        centerY,
-        clientX,
-        clientY})
-    return caclulatePercentageFromMouseAngle({
-        mouseAngle,
-        angleOffset,
-        angleRange,
-    })
 }
 
 export const findClosest = (values, value) => {

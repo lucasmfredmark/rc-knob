@@ -1,2 +1,5 @@
 node_modules
 /side/package-lock.json
+/coverage
+.*
+_*

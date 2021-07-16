@@ -1,16 +1,16 @@
 export const clamp = (min, max, value) => Math.max(min, Math.min(max, value))
 
 export const caclulatePercentage = ({
-    startX,
-    startY,
+    centerX,
+    centerY,
     clientX,
     clientY,
     angleOffset,
     angleRange,
 }) => {
-    const x = startX - clientX
-    const y = startY - clientY
-    const degree = (Math.atan2(-y, -x) * 180) / Math.PI + 90 - angleOffset
+    const x = clientX - centerX
+    const y = clientY - centerY
+    const degree = (Math.atan2(y, x) * 180) / Math.PI + 90 - angleOffset
     const angle = degree < 0 ? degree + 360 : degree % 360
 
     if (angle <= angleRange) {
@@ -39,10 +39,10 @@ export const getValueFromPercentage = ({ min, max, percentage }) =>
 export const getPercentageFromValue = ({ min, max, value }) =>
     (value - min) / (max - min)
 
-export const getStartXY = ({ container, size }) => {
+export const getClientCenter = ({ container, size }) => {
     const rect = container.current.getBoundingClientRect();
     return {
-        startX: rect.x + size / 2,
-        startY: rect.y + size / 2,
+        centerX: rect.x + size / 2,
+        centerY: rect.y + size / 2,
     }
 }

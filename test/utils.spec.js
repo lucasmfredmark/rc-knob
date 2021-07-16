@@ -10,8 +10,8 @@ describe('utils', () => {
     describe('caclulatePercentage', () => {
         it('when the angle is inside the range ', () => {
             const result = caclulatePercentage({
-                startX: 0,
-                startY: 0,
+                centerX: 0,
+                centerY: 0,
                 clientX: 0,
                 clientY: 10,
                 angleOffset: 0,
@@ -21,8 +21,8 @@ describe('utils', () => {
         })
         it('when the angle is larger then the range ', () => {
             const result = caclulatePercentage({
-                startX: 0,
-                startY: 0,
+                centerX: 0,
+                centerY: 0,
                 clientX: 0,
                 clientY: 10,
                 angleOffset: 0,

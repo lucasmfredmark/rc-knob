@@ -2,7 +2,7 @@ import { useReducer, useEffect, useRef } from 'react'
 import {
     caclulatePercentage,
     findClosest,
-    getStartXY,
+    getClientCenter,
     getValueFromPercentage,
     clamp,
     getPercentageFromValue,
@@ -17,7 +17,7 @@ import {
 const onStart = state => ({
     ...state,
     isActive: true,
-    ...getStartXY(state),
+    ...getClientCenter(state),
 })
 
 const onMove = ({ state, action, onChange }) => {

@@ -80,6 +80,7 @@ const reducer = (onChange, onMouseDown, onMouseUp) => (state, action) => {
 export default ({
     min,
     max,
+    multiRotation,
     initialValue,
     angleOffset = 0,
     angleRange = 360,
@@ -99,6 +100,7 @@ export default ({
             isActive: false,
             min,
             max,
+            multiRotation,
             angleOffset,
             angleRange,
             mouseAngle: null,

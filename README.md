@@ -111,6 +111,13 @@ It's also used to calculate the single steps for the `Scale` component.
 ##### value
 Value of the knob
 
+##### multiRotation
+If `true`, the knob can be turned many times.
+
+`min`/`max` are not taken into acount anymore to limit the value.
+
+Default is `false`
+
 ### `<Arc/>`
 Renders an arc that indicates the current knob value.
 

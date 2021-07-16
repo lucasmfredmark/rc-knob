@@ -72,6 +72,46 @@ describe('utils', () => {
             })
             expect(result).toEqual({updated: false, percentage: 0, mouseAngle: 180})
         })
+        it('when the position is closed but outside of the range', () => {
+            const result = caclulateStateFromMousePosition({
+                centerX: 0,
+                centerY: 0,
+                clientX: -10,
+                clientY: -10,
+                angleOffset: 0,
+                angleRange: 360,
+                previousPercentage: 0.125,
+                previousMouseAngle: 45,
+            })
+            expect(result).toEqual({updated: true, percentage: 0.0, mouseAngle: 0})
+        })
+        it('when the position is negative with a click on the positive side', () => {
+            const result = caclulateStateFromMousePosition({
+                multiRotation: true,
+                centerX: 0,
+                centerY: 0,
+                clientX: 10,
+                clientY: -10,
+                angleOffset: 0,
+                angleRange: 360,
+                percentage: -0.125,
+                previousMouseAngle: null,
+            })
+            expect(result).toEqual({updated: true, percentage: 0.125, mouseAngle: 45})
+        })
+        it('when the position is at start and click on the end', () => {
+            const result = caclulateStateFromMousePosition({
+                centerX: 0,
+                centerY: 0,
+                clientX: -10,
+                clientY: -10,
+                angleOffset: 0,
+                angleRange: 360,
+                percentage: 0.875,
+                previousMouseAngle: null,
+            })
+            expect(result).toEqual({updated: true, percentage: 0.875, mouseAngle: 315})
+        })
     })
 
     describe('findClosest', () => {

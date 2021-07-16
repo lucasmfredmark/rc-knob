@@ -31,8 +31,10 @@ export const caclulateStateFromMousePosition = ({
     centerY,
     clientX,
     clientY,
+    multiRotation,
     angleOffset,
     angleRange,
+    percentage,
     previousPercentage,
     previousMouseAngle,
 }) => {
@@ -55,10 +57,10 @@ export const caclulateStateFromMousePosition = ({
         }
 
         // clamp the percentage
-        const percentage = previousPercentage + validDeltaAngle / angleRange
-        if (percentage < 0 || percentage > 1) {
-            const clampedPercentage = (percentage < 0) ? 0 : 1
-            const theoricalMouseAngle = (percentage < 0) ? angleOffset : angleOffset + angleRange
+        const newPercentage = previousPercentage + validDeltaAngle / angleRange
+        if (!multiRotation && (newPercentage < 0 || newPercentage > 1)) {
+            const clampedPercentage = (newPercentage < 0) ? 0 : 1
+            const theoricalMouseAngle = (newPercentage < 0) ? angleOffset : angleOffset + angleRange
             return {
                 updated: true,
                 mouseAngle: theoricalMouseAngle,
@@ -68,18 +70,33 @@ export const caclulateStateFromMousePosition = ({
         return {
             updated: true,
             mouseAngle,
-            percentage: percentage,
+            percentage: newPercentage,
         }
     } else {
-        const percentage = caclulatePercentageFromMouseAngle({
-            angleOffset,
-            angleRange,
-            mouseAngle,
-        })
-        return {
-            updated: true,
-            mouseAngle,
-            percentage: percentage,
+        if (multiRotation) {
+            const rawPercentage = caclulatePercentageFromMouseAngle({
+                angleOffset,
+                angleRange,
+                mouseAngle,
+            })
+            const deltaPercent = ((rawPercentage + 1) - (percentage % 1)) % 1
+            const validDeltaPercent = (deltaPercent > 0.5) ? deltaPercent - 1 : deltaPercent
+            return {
+                updated: true,
+                mouseAngle,
+                percentage: percentage + validDeltaPercent,
+            }
+        } else {
+            const newPercentage = caclulatePercentageFromMouseAngle({
+                angleOffset,
+                angleRange,
+                mouseAngle,
+            })
+            return {
+                updated: true,
+                mouseAngle,
+                percentage: newPercentage,
+            }
         }
     }
 }

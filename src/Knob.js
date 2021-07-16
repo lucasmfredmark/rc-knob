@@ -18,6 +18,7 @@ export const Knob = ({
     min,
     max,
     value: initialValue,
+    multiRotation = false,
     angleOffset = 0,
     angleRange = 360,
     size,
@@ -42,6 +43,7 @@ export const Knob = ({
     } = useUpdate({
         min,
         max,
+        multiRotation,
         initialValue,
         angleOffset,
         angleRange,

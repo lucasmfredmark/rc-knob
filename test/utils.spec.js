@@ -1,35 +1,10 @@
-import { clamp, caclulatePercentage, findClosest, caclulateStateFromMouseAngle } from '../src/utils'
+import { clamp, findClosest, caclulateStateFromMouseAngle } from '../src/utils'
 
 describe('utils', () => {
     it('clamp value', () => {
         expect(clamp(0, 10, 5)).toBe(5)
         expect(clamp(0, 10, -1)).toBe(0)
         expect(clamp(0, 10, 11)).toBe(10)
-    })
-
-    describe('caclulatePercentage', () => {
-        it('when the angle is inside the range ', () => {
-            const result = caclulatePercentage({
-                centerX: 0,
-                centerY: 0,
-                clientX: 0,
-                clientY: 10,
-                angleOffset: 0,
-                angleRange: 360,
-            })
-            expect(result).toBe(0.5)
-        })
-        it('when the angle is larger then the range ', () => {
-            const result = caclulatePercentage({
-                centerX: 0,
-                centerY: 0,
-                clientX: 0,
-                clientY: 10,
-                angleOffset: 0,
-                angleRange: 90,
-            })
-            expect(result).toBe(1)
-        })
     })
 
     describe('caclulateStateFromMouseAngle', () => {

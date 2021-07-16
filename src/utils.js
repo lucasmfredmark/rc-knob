@@ -92,26 +92,6 @@ export const caclulateStateFromMouseAngle = ({
     }
 }
 
-export const caclulatePercentage = ({
-    centerX,
-    centerY,
-    clientX,
-    clientY,
-    angleOffset,
-    angleRange,
-}) => {
-    const mouseAngle = caclulateMouseAngle({
-        centerX,
-        centerY,
-        clientX,
-        clientY})
-    return caclulatePercentageFromMouseAngle({
-        mouseAngle,
-        angleOffset,
-        angleRange,
-    })
-}
-
 export const findClosest = (values, value) => {
     let result
     let lastDelta = Infinity

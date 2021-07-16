@@ -26,11 +26,8 @@ export const caclulatePercentageFromMouseAngle = ({
     }
 }
 
-export const caclulateStateFromMousePosition = ({
-    centerX,
-    centerY,
-    clientX,
-    clientY,
+export const caclulateStateFromMouseAngle = ({
+    mouseAngle,
     multiRotation,
     angleOffset,
     angleRange,
@@ -38,12 +35,6 @@ export const caclulateStateFromMousePosition = ({
     previousPercentage,
     previousMouseAngle,
 }) => {
-    const mouseAngle = caclulateMouseAngle({
-        centerX,
-        centerY,
-        clientX,
-        clientY})
-
     if (previousMouseAngle !== null) {
         // normalize and cancel the interaction if the delta angle is too big
         const deltaAngle = (mouseAngle - previousMouseAngle) % 360

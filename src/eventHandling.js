@@ -8,7 +8,7 @@ const DIRECTIONS = {
 export const onMouseMoveStart = dispatch => e => {
     e.preventDefault()
     e.stopPropagation()
-    dispatch({ ...e, type: 'START' })
+    dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'START' })
 }
 
 export const onKeyDown = dispatch => e => {

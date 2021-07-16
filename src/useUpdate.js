@@ -1,6 +1,6 @@
 import { useReducer, useEffect, useRef } from 'react'
 import {
-    caclulatePercentage,
+    caclulateStateFromMousePosition,
     findClosest,
     getClientCenter,
     getValueFromPercentage,
@@ -14,23 +14,35 @@ import {
     onScroll,
 } from './eventHandling'
 
-const onStart = state => ({
-    ...state,
-    isActive: true,
-    ...getClientCenter(state),
-})
+const onStart = (state, action) => {
+    const center = getClientCenter(state)
+    const position = caclulateStateFromMousePosition({
+        previousMouseAngle: null,
+        previousPercentage: null,
+        ...center, ...state, ...action
+    })
+    return {
+        ...state,
+        isActive: true,
+        ...position,
+        ...center,
+    }
+}
+
 
 const onMove = ({ state, action, onChange }) => {
-    const percentage = caclulatePercentage({
+    const position = caclulateStateFromMousePosition({
+        previousMouseAngle: state.mouseAngle,
+        previousPercentage: state.percentage,
         ...state,
         ...action,
     })
-    let value = getValueFromPercentage({ ...state, percentage })
+    const value = getValueFromPercentage({ ...state, ...position })
 
     onChange(value)
     return {
         ...state,
-        percentage,
+        ...position,
         value,
     }
 }
@@ -52,7 +64,7 @@ const reducer = (onChange, onMouseDown, onMouseUp) => (state, action) => {
     switch (action.type) {
         case 'START':
             onMouseDown()
-            return onStart(state)
+            return onStart(state, action)
         case 'MOVE':
             return onMove({ state, action, onChange })
         case 'STOP':
@@ -89,6 +101,7 @@ export default ({
             max,
             angleOffset,
             angleRange,
+            mouseAngle: null,
             percentage: initialValue ? (initialValue - min) / (max - min) : 0,
             value: initialValue || 0,
             svg,

@@ -1,4 +1,4 @@
-import { clamp, caclulatePercentage, findClosest } from '../src/utils'
+import { clamp, caclulatePercentage, findClosest, caclulateStateFromMousePosition } from '../src/utils'
 
 describe('utils', () => {
     it('clamp value', () => {
@@ -29,6 +29,48 @@ describe('utils', () => {
                 angleRange: 90,
             })
             expect(result).toBe(1)
+        })
+    })
+
+    describe('caclulateStateFromMousePosition', () => {
+        it('when the new pos is inside the range ', () => {
+            const result = caclulateStateFromMousePosition({
+                centerX: 0,
+                centerY: 0,
+                clientX: 10,
+                clientY: -10,
+                angleOffset: 0,
+                angleRange: 360,
+                previousPercentage: 0,
+                previousMouseAngle: 0,
+            })
+            expect(result).toEqual({updated:true, percentage: 0.125, mouseAngle: 45})
+        })
+        it('when the new pos is inside outside range', () => {
+            const result = caclulateStateFromMousePosition({
+                centerX: 0,
+                centerY: 0,
+                clientX: 10,
+                clientY: 10,
+                angleOffset: 0,
+                angleRange: 360,
+                previousPercentage: 0,
+                previousMouseAngle: 0,
+            })
+            expect(result).toEqual({updated:false, percentage: 0, mouseAngle: 0})
+        })
+        it('when the new pos is far away from the previous angle ', () => {
+            const result = caclulateStateFromMousePosition({
+                centerX: 0,
+                centerY: 0,
+                clientX: 0,
+                clientY: -10,
+                angleOffset: 0,
+                angleRange: 360,
+                previousPercentage: 0,
+                previousMouseAngle: 180,
+            })
+            expect(result).toEqual({updated: false, percentage: 0, mouseAngle: 180})
         })
     })
 

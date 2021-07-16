@@ -48,157 +48,198 @@ It is accessible by keyboard using `tab`.
 
 #### Props
 
-##### `angleOffset`
-Offset of the start angle in degree of the knob. 
-The default is `0` which will be the top of the circle.
+- `angleOffset`
 
-##### `angleRange`
-Angle of the range in degree. 
-By default its 360.
+    Offset of the start angle in degree of the knob. 
+    The default is `0` which will be the top of the circle.
 
-##### `ariaLabelledBy`
-Will be added as `aria-labelledby` to the knob main element.
+- `angleRange`
 
-##### `ariaValueText`
-Will be added as `aria-valuetext` to the knob main element.
+    Angle of the range in degree. 
+    By default its 360.
 
-##### `children`
-Can be any of [`Arc`](#Arc), [`Pointer`](#Pointer), [`Scale`](#Scale) and [`Value`](#Value). 
-Also multiple components of the same type can be added.
-Beside that, any SVG element including `filter` can be rendered.
+- `ariaLabelledBy`
 
-##### `className`
-Will be added to the knob main element.
+    Will be added as `aria-labelledby` to the knob main element.
 
-##### `max`
-Max value of the knob.
+- `ariaValueText`
 
-##### `min`
-Min value of the knob.
+    Will be added as `aria-valuetext` to the knob main element.
 
-##### `onChange`
-Callback that will pass the value when user interact with the knob.
+- `children`
 
-##### `onMouseUp`
-Callback that will pass the event when user press the mouse button over the knob.
+    Can be any of [`Arc`](#Arc), [`Pointer`](#Pointer), [`Scale`](#Scale)
+    and [`Value`](#Value). 
+    Also multiple components of the same type can be added.
+    Beside that, any SVG element including `filter` can be rendered.
 
-##### `onMouseDown`
-Callback that will pass the event when user release the mouse button over the knob.
+- `className`
 
-##### `readOnly`
-Indicates if the knob is editable.
-If true the knob do not react to user input
-Default is `false`.
+    Will be added to the knob main element.
 
-##### `useMouseWheel`
-Indicates if the knob can be edited with the mouse wheel.
-If `true` the knob uses mouse wheel event, and the default wheel event is inhibited.
-Set to `false` can prevent to edit the widget during page scroll.
-Default is `true`.
+- `max`
 
-##### `size`
-Width and height of the knob in `px`
+    Max value of the knob.
 
-##### `snap`
-Indicates if the knob should snap to a step. 
-Has only an effect if `steps` is set.
-Is `false` be default.
+- `min`
 
-##### `steps`
-Number of steps the knob can snap to.
-It's also used to calculate the single steps for the `Scale` component. 
+    Min value of the knob.
 
-##### value
-Value of the knob
+- `onChange`
 
-##### multiRotation
-If `true`, the knob can be turned many times.
+    Callback that will pass the value when user interact with the knob.
 
-`min`/`max` are not taken into acount anymore to limit the value.
+- `onMouseUp`
 
-Default is `false`
+    Callback that will pass the event when user press the mouse button
+    over the knob.
+
+- `onMouseDown`
+
+    Callback that will pass the event when user release the mouse button
+    over the knob.
+
+- `readOnly`
+
+    Indicates if the knob is editable.
+    If true the knob do not react to user input
+    Default is `false`.
+
+- `useMouseWheel`
+
+    Indicates if the knob can be edited with the mouse wheel.
+    If `true` the knob uses mouse wheel event, and the default wheel
+    event is inhibited. Set to `false` can prevent to edit the widget
+    during page scroll. Default is `true`.
+
+- `size`
+
+    Width and height of the knob in `px`
+
+- `snap`
+
+    Indicates if the knob should snap to a step. 
+    Has only an effect if `steps` is set.
+    Is `false` be default.
+
+- `steps`
+
+    Number of steps the knob can snap to.
+    It's also used to calculate the single steps for the `Scale` component. 
+
+- `value`
+
+    Value of the knob
+
+- `multiRotation`
+
+    If `true`, the knob can be turned many times.
+    `min`/`max` are not taken into acount anymore to limit the value.
+    Default is `false`.
 
 ### `<Arc/>`
+
 Renders an arc that indicates the current knob value.
 
 #### Props
 
-##### `arcWidth`
-Width of the arc.
-The arc will expand to the centre.
+- `arcWidth`
 
-##### `background`
-Color of the arc over the whole range of the knob.
-If `background` is not set, the background arc will not rendered.
+    Width of the arc.
+    The arc will expand to the centre.
 
-##### `color`
-Color of the arc that indicates the value of the knob.
+- `background`
 
-##### `radius`
-Outer radius of the arc.
-Will be the knob `size` by default
+    Color of the arc over the whole range of the knob.
+    If `background` is not set, the background arc will not rendered.
+
+- `color`
+
+    Color of the arc that indicates the value of the knob.
+
+- `radius`
+
+    Outer radius of the arc.
+    Will be the knob `size` by default
 
 ### `<Range/>`
+
 Renders a range between 2 angles.
 
 #### Props
 
-##### `arcWidth`
-Width of the range.
-The range will expand to the centre.
+- `arcWidth`
 
-##### `color`
-Color of the range.
+    Width of the range.
+    The range will expand to the centre.
 
-##### `radius`
-Outer radius of the range.
-Will be the knob `size` by default
+- `color`
 
-##### `percentFrom`
-Starting point of the range.
-If unset, `percent` value of the knob is used.
+    Color of the range.
 
-##### `percentTo`
-Endding point of the range.
-If unset, `percent` value of the knob is used.
+- `radius`
+
+    Outer radius of the range.
+    Will be the knob `size` by default
+
+- `percentFrom`
+
+    Starting point of the range.
+    If unset, `percent` value of the knob is used.
+
+- `percentTo`
+
+    Endding point of the range.
+    If unset, `percent` value of the knob is used.
 
 ### `<Pointer/>`
+
 Pointer of the knob.
-Can be either be a SVG `rect` or `circle` depending on the passed `type` prop or any SVG element that is passed as a children.
+Can be either be a SVG `rect` or `circle` depending on the passed `type`
+prop or any SVG element that is passed as a children.
 
 #### Props
 
-##### `children`
-Can be any SVG element or a component that will render a SVG element. 
-If you pass a component the percentage of the current value will be passed as a prop. 
+- `children`
+
+    Can be any SVG element or a component that will render a SVG element. 
+    If you pass a component the percentage of the current value will be
+    passed as a prop. 
  
-The element will be rendered as pointer.
-Note, that you have to pass `width` and `height` as props to make calculate the correct position.
+    The element will be rendered as pointer.
+    Note, that you have to pass `width` and `height` as props to make
+    calculate the correct position.
 
-##### `className`
-Will be added to the `rect`, `circle` or the children.
+- `className`
 
-##### `color`
-`color` prop passed to the `rect`, `circle` element if type is selected.
+    Will be added to the `rect`, `circle` or the children.
 
-##### `height`
-Height of the `rect` or the custom element. 
-Will be ignored for circle.
-Will be the same as `width` if not set.
+- `color`
 
-##### `radius`
+    `color` prop passed to the `rect`, `circle` element if type is selected.
+
+- `height`
+
+    Height of the `rect` or the custom element. 
+    Will be ignored for circle.
+    Will be the same as `width` if not set.
+
+- `radius`
 Outer radius of the circle the pointer sits on.
 
-##### `type`
-Can be `rect` or `circle`. 
-Will render the according SVG element.
-`width` and|or `height` props needs to be set.
+- `type`
 
-##### `width`
-Width of the `rect` or the custom element. 
-Radius when type is set to `circle`.
+    Can be `rect` or `circle`. 
+    Will render the according SVG element.
+    `width` and|or `height` props needs to be set.
+
+- `width`
+
+    Width of the `rect` or the custom element. 
+    Radius when type is set to `circle`.
 
 ### `<Scale/>`
+
 Renders a radial scale.
 The number of ticks is set by the `step` prop of the parent [`Knob`](#Knob) component.
 
@@ -207,75 +248,101 @@ Additionally a render function can be passed as a prop, that will render each ti
 
 This is useful if the scale ticks should have different colors, or different tick length for every 10th tick for example.
 
-
 #### Props
 
-##### `type`
-Can be `rect` or `circle`, default is `rect`. 
-Will render the according SVG element.
-`tickWidth` and|or `tickHeight` props needs to be set.
+- `type`
 
-##### `radius`
-Outer radius where the ticks ends.
+    Can be `rect` or `circle`, default is `rect`. 
+    Will render the according SVG element.
+    `tickWidth` and|or `tickHeight` props needs to be set.
 
-##### `tickWidth`
-Width of a single tick.
-Used as radius if type is `circle`.
+- `radius`
 
-##### `tickHeight`
-Height of a single tick.
-Is ignored when type is `circle`.
+    Outer radius where the ticks ends.
 
-##### `color`
-Will be passed as color prop to the render SVG element of a tick or to the custom render function.
+- `tickWidth`
 
-##### `activeColor`
-`color` for the tick that indicates the same value as the current knob value.
+    Width of a single tick.
+    Used as radius if type is `circle`.
 
-##### `className`
-Will be passed as prop to the render SVG element of a tick or to the custom render function.
+- `tickHeight`
 
+    Height of a single tick.
+    Is ignored when type is `circle`.
 
-##### `activeClassName`
-`className` for the tick that indicates the same value as the current knob value.
+- `color`
 
-##### `fn`
+    Will be passed as color prop to the render SVG element of a tick or
+    to the custom render function.
+
+- `activeColor`
+
+    `color` for the tick that indicates the same value as the current knob value.
+
+- `className`
+
+    Will be passed as prop to the render SVG element of a tick or to
+    the custom render function.
+
+- `activeClassName`
+
+    `className` for the tick that indicates the same value as the current knob value.
+
+- `fn`
+
+    Function that can be used to have the full control over how a tick
+    is rendered. The function needs to return a SVG element.
+    See details on [fn function](#custom-function) bellow.
+
+#### Custom function
+
+The property `fn` is a function which get the following props passed:
+
 Function that can be used to have the full control over how a tick is rendered.
 The function needs to return a SVG element.
 The function will get the following props passed:
-`active`,
-`activeClassName`,
-`activeColor`,
-`angleOffset`,
-`center`,
-`className`,
-`color`,
-`stepSize`,
-`tickHeight`,
-`translateX`,
-`translateY`,
-`tickWidth`.
 
-Most of them are just passed down from the [`Pointer`](#Pointer) or the [`Knob`](#Knob). 
+- `active`
+- `activeClassName`
+- `activeColor`
+- `angleOffset`
+- `center`
+- `className`
+- `color`
+- `stepSize`
+- `tickHeight`
+- `translateX`
+- `translateY`
+- `tickWidth`
 
-Additionall are 
-`center` the half of the [`size`](#size) of the [`Knob`](#Knob) ,
-`stepSize` the size of the angle of one step in degree,
-`translateX`, `translateY` that are needed to put the tick on the correct position using the transform prop e.g: ``transform={`translate(${translateX} ${translateY})`}``
-and `i` which is the index of the current tick.
+Most of them are just passed down from the [`Pointer`](#Pointer) or the
+[`Knob`](#Knob). 
+
+Additional are:
+
+- `center`, the half of the [`size`](#size) of the [`Knob`](#Knob)
+- `stepSize`, the size of the angle of one step in degree
+- `translateX`, `translateY` that are needed to put the tick on the correct
+  position using the transform prop e.g:
+  ``transform={`translate(${translateX} ${translateY})`}``
+- `i` which is the index of the current tick.
 
 ### `<Value/>`
+
 Render the current value as SVG text element.
 
 #### Props
 
-##### `decimalPlace`
-Number of decimal places the value should rendered with.
-Is `0` by default.
+- `decimalPlace`
 
-##### `className`
-`className` that is passed to the SVG `text` component.
+    Number of decimal places the value should rendered with.
+    Is `0` by default.
 
-##### `marginBottom`
-Useful to adjust the horizontal position of the text inside of the [`Knob`](#Knob).
+- `className`
 
+    `className` that is passed to the SVG `text` component.
+
+- `marginBottom`
+
+    Useful to adjust the horizontal position of the text inside of the
+    [`Knob`](#Knob).

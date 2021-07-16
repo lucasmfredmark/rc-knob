@@ -1,6 +1,6 @@
 export const clamp = (min, max, value) => Math.max(min, Math.min(max, value))
 
-export const caclulateMouseAngle = ({
+export const calculateMouseAngle = ({
     centerX,
     centerY,
     clientX,
@@ -13,7 +13,7 @@ export const caclulateMouseAngle = ({
     return angle
 }
 
-export const caclulatePercentageFromMouseAngle = ({
+export const calculatePercentageFromMouseAngle = ({
     mouseAngle,
     angleOffset,
     angleRange,
@@ -26,7 +26,7 @@ export const caclulatePercentageFromMouseAngle = ({
     }
 }
 
-export const caclulateStateFromMouseAngle = ({
+export const calculatePositionFromMouseAngle = ({
     mouseAngle,
     multiRotation,
     angleOffset,
@@ -65,7 +65,7 @@ export const caclulateStateFromMouseAngle = ({
         }
     } else {
         if (multiRotation) {
-            const rawPercentage = caclulatePercentageFromMouseAngle({
+            const rawPercentage = calculatePercentageFromMouseAngle({
                 angleOffset,
                 angleRange,
                 mouseAngle,
@@ -78,7 +78,7 @@ export const caclulateStateFromMouseAngle = ({
                 percentage: percentage + validDeltaPercent,
             }
         } else {
-            const newPercentage = caclulatePercentageFromMouseAngle({
+            const newPercentage = calculatePercentageFromMouseAngle({
                 angleOffset,
                 angleRange,
                 mouseAngle,

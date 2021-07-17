@@ -13,7 +13,8 @@ import {
     handleEventListener,
 } from './eventHandling'
 
-const onStart = (state, action, callbacks) => {
+const reduceOnStart = (state, action, callbacks) => {
+    callbacks.onMouseDown()
     const center = getClientCenter(state)
     const mouseAngle = calculateMouseAngle({...center, ...action})
     const position = calculatePositionFromMouseAngle({
@@ -39,7 +40,7 @@ const onStart = (state, action, callbacks) => {
 }
 
 
-const onMove = (state, action, callbacks) => {
+const reduceOnMove = (state, action, callbacks) => {
     const mouseAngle = calculateMouseAngle({...state, ...action})
     const position = calculatePositionFromMouseAngle({
         previousMouseAngle: state.mouseAngle,
@@ -60,7 +61,35 @@ const onMove = (state, action, callbacks) => {
     }
 }
 
-const onChangeByStep = (state, action, callbacks) => {
+const reduceOnStop = (state, action, callbacks) => {
+    if (!state.tracking) {
+        callbacks.onChange(state.value)
+    }
+    callbacks.onMouseUp()
+    return {
+        ...state, isActive: false,
+        value: state.value,
+        percentage: state.percentage,
+        startPercentage: undefined,
+        startValue: undefined,
+    }
+}
+
+const reduceOnCancel = (state, action, callbacks) => {
+    const percentage = state.startPercentage
+    const value = state.startValue
+    if (state.tracking) {
+        callbacks.onChange(value)
+    }
+    callbacks.onMouseUp()
+    return {
+        ...state, isActive: false, value, percentage,
+        startPercentage: undefined,
+        startValue: undefined,
+    }
+}
+
+const reduceOnSteps = (state, action, callbacks) => {
     const value = clamp(
         state.min,
         state.max,
@@ -77,36 +106,15 @@ const onChangeByStep = (state, action, callbacks) => {
 const reducer = (callbacks) => (state, action) => {
     switch (action.type) {
         case 'START':
-            callbacks.onMouseDown()
-            return onStart(state, action, callbacks)
+            return reduceOnStart(state, action, callbacks)
         case 'MOVE':
-            return onMove(state, action, callbacks)
+            return reduceOnMove(state, action, callbacks)
         case 'STOP':
-            if (!state.tracking) {
-                callbacks.onChange(state.value)
-            }
-            callbacks.onMouseUp()
-            return {
-                ...state, isActive: false,
-                value: state.value,
-                percentage: state.percentage,
-                startPercentage: undefined,
-                startValue: undefined,
-            }
+            return reduceOnStop(state, action, callbacks)
         case 'CANCEL':
-            const percentage = state.startPercentage
-            const value = state.startValue
-            if (state.tracking) {
-                callbacks.onChange(value)
-            }
-            callbacks.onMouseUp()
-            return {
-                ...state, isActive: false, value, percentage,
-                startPercentage: undefined,
-                startValue: undefined,
-            }
+            return reduceOnCancel(state, action, callbacks)
         case 'STEPS':
-            return onChangeByStep(state, action, callbacks)
+            return reduceOnSteps(state, action, callbacks)
         default:
             return { ...state, isActive: false, value: state.value }
     }

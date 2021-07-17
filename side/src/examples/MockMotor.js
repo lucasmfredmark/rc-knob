@@ -12,8 +12,6 @@ export const MockMotor = ({
   );
   const [internalTime, setInternalTime] = React.useState(now);
 
-  console.log("target", target)
-
   const validTarget = (target, position) => {
     return target !== null && target !== position;
   };

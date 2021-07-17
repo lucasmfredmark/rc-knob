@@ -289,6 +289,10 @@ var handleEventListener = function handleEventListener(_ref) {
     var events = Object();
 
     var onStart = function onStart(e) {
+      if (e.pointerType == "mouse" && e.button != 0) {
+        return;
+      }
+
       e.preventDefault();
       e.stopPropagation();
 
@@ -297,7 +301,7 @@ var handleEventListener = function handleEventListener(_ref) {
         div.setPointerCapture(events.capturedPointerId);
         div.addEventListener('pointermove', onMove);
         div.addEventListener('pointerup', onStop);
-        div.addEventListener('pointercancel', onStop);
+        div.addEventListener('pointercancel', onCancel);
       } else {
         // fallback with mouse event
         window.addEventListener('mousemove', onMove);
@@ -305,6 +309,8 @@ var handleEventListener = function handleEventListener(_ref) {
         events.capturedWindow = true;
       }
 
+      div.addEventListener('contextmenu', onContextMenu);
+      events.capturedContextMenu = true;
       dispatch({
         clientX: e.clientX,
         clientY: e.clientY,
@@ -317,7 +323,7 @@ var handleEventListener = function handleEventListener(_ref) {
         div.releasePointerCapture(events.capturedPointerId);
         div.removeEventListener('pointermove', onMove);
         div.removeEventListener('pointerup', onStop);
-        div.removeEventListener('pointercancel', onStop);
+        div.removeEventListener('pointercancel', onCancel);
         events.capturedPointerId = undefined;
       }
 
@@ -325,6 +331,11 @@ var handleEventListener = function handleEventListener(_ref) {
         window.removeEventListener('mousemove', onMove);
         window.removeEventListener('mouseup', onStop);
         events.capturedWindow = false;
+      }
+
+      if (events.capturedContextMenu) {
+        div.removeEventListener('contextmenu', onContextMenu);
+        events.capturedContextMenu = false;
       }
     };
 
@@ -343,6 +354,23 @@ var handleEventListener = function handleEventListener(_ref) {
       dispatch({
         type: 'STOP'
       });
+    };
+
+    var onCancel = function onCancel() {
+      clearCapture();
+      dispatch({
+        type: 'CANCEL'
+      });
+    };
+
+    var onContextMenu = function onContextMenu(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      clearCapture();
+      dispatch({
+        type: 'CANCEL'
+      });
+      return false;
     };
 
     var onWheel = useMouseWheel ? onScroll(dispatch) : null;
@@ -364,7 +392,7 @@ var handleEventListener = function handleEventListener(_ref) {
   };
 };
 
-var onStart = function onStart(state, action, callbacks) {
+var reduceOnStart = function reduceOnStart(state, action, callbacks) {
   var center = getClientCenter(state);
   var mouseAngle = calculateMouseAngle(_objectSpread({}, center, action));
   var position = calculatePositionFromMouseAngle(_objectSpread({
@@ -374,6 +402,7 @@ var onStart = function onStart(state, action, callbacks) {
     mouseAngle: mouseAngle
   }));
   var value = getValueFromPercentage(_objectSpread({}, state, position));
+  callbacks.onStart();
   callbacks.onInteractiveChange(value);
 
   if (state.tracking) {
@@ -382,10 +411,13 @@ var onStart = function onStart(state, action, callbacks) {
 
   return _objectSpread({}, state, {
     isActive: true
-  }, position, center);
+  }, position, center, {
+    startPercentage: state.percentage,
+    startValue: state.value
+  });
 };
 
-var onMove = function onMove(state, action, callbacks) {
+var reduceOnMove = function reduceOnMove(state, action, callbacks) {
   var mouseAngle = calculateMouseAngle(_objectSpread({}, state, action));
   var position = calculatePositionFromMouseAngle(_objectSpread({
     previousMouseAngle: state.mouseAngle,
@@ -405,7 +437,40 @@ var onMove = function onMove(state, action, callbacks) {
   });
 };
 
-var onChangeByStep = function onChangeByStep(state, action, callbacks) {
+var reduceOnStop = function reduceOnStop(state, action, callbacks) {
+  if (!state.tracking) {
+    callbacks.onChange(state.value);
+  }
+
+  callbacks.onEnd();
+  return _objectSpread({}, state, {
+    isActive: false,
+    value: state.value,
+    percentage: state.percentage,
+    startPercentage: undefined,
+    startValue: undefined
+  });
+};
+
+var reduceOnCancel = function reduceOnCancel(state, action, callbacks) {
+  var percentage = state.startPercentage;
+  var value = state.startValue;
+  callbacks.onEnd();
+
+  if (state.tracking) {
+    callbacks.onChange(value);
+  }
+
+  return _objectSpread({}, state, {
+    isActive: false,
+    value: value,
+    percentage: percentage,
+    startPercentage: undefined,
+    startValue: undefined
+  });
+};
+
+var reduceOnSteps = function reduceOnSteps(state, action, callbacks) {
   var value = clamp(state.min, state.max, state.value + 1 * action.direction);
   callbacks.onChange(value);
   return _objectSpread({}, state, {
@@ -420,25 +485,19 @@ var reducer = function reducer(callbacks) {
   return function (state, action) {
     switch (action.type) {
       case 'START':
-        callbacks.onMouseDown();
-        return onStart(state, action, callbacks);
+        return reduceOnStart(state, action, callbacks);
 
       case 'MOVE':
-        return onMove(state, action, callbacks);
+        return reduceOnMove(state, action, callbacks);
 
       case 'STOP':
-        if (!state.tracking) {
-          callbacks.onChange(state.value);
-        }
+        return reduceOnStop(state, action, callbacks);
 
-        callbacks.onMouseUp();
-        return _objectSpread({}, state, {
-          isActive: false,
-          value: state.value
-        });
+      case 'CANCEL':
+        return reduceOnCancel(state, action, callbacks);
 
       case 'STEPS':
-        return onChangeByStep(state, action, callbacks);
+        return reduceOnSteps(state, action, callbacks);
 
       default:
         return _objectSpread({}, state, {
@@ -462,8 +521,8 @@ var useUpdate = (function (_ref) {
       steps = _ref.steps,
       onChange = _ref.onChange,
       onInteractiveChange = _ref.onInteractiveChange,
-      onMouseDown = _ref.onMouseDown,
-      onMouseUp = _ref.onMouseUp,
+      onStart = _ref.onStart,
+      onEnd = _ref.onEnd,
       readOnly = _ref.readOnly,
       tracking = _ref.tracking,
       useMouseWheel = _ref.useMouseWheel;
@@ -473,8 +532,8 @@ var useUpdate = (function (_ref) {
   var _useReducer = React.useReducer(reducer({
     onChange: onChange,
     onInteractiveChange: onInteractiveChange,
-    onMouseDown: onMouseDown,
-    onMouseUp: onMouseUp
+    onStart: onStart,
+    onEnd: onEnd
   }), {
     isActive: false,
     min: min,
@@ -511,7 +570,6 @@ var useUpdate = (function (_ref) {
     container: container,
     percentage: steps ? findClosest(steps, percentage) : percentage,
     value: value,
-    angle: angle,
     onKeyDown: onKeyDown(dispatch)
   };
 });
@@ -981,10 +1039,10 @@ var Knob = function Knob(_ref2) {
       onChange = _ref2$onChange === void 0 ? function () {} : _ref2$onChange,
       _ref2$onInteractiveCh = _ref2.onInteractiveChange,
       onInteractiveChange = _ref2$onInteractiveCh === void 0 ? function () {} : _ref2$onInteractiveCh,
-      _ref2$onMouseDown = _ref2.onMouseDown,
-      onMouseDown = _ref2$onMouseDown === void 0 ? function () {} : _ref2$onMouseDown,
-      _ref2$onMouseUp = _ref2.onMouseUp,
-      onMouseUp = _ref2$onMouseUp === void 0 ? function () {} : _ref2$onMouseUp,
+      _ref2$onStart = _ref2.onStart,
+      onStart = _ref2$onStart === void 0 ? function () {} : _ref2$onStart,
+      _ref2$onEnd = _ref2.onEnd,
+      onEnd = _ref2$onEnd === void 0 ? function () {} : _ref2$onEnd,
       children = _ref2.children,
       steps = _ref2.steps,
       _ref2$snap = _ref2.snap,
@@ -1013,8 +1071,8 @@ var Knob = function Knob(_ref2) {
     useMouseWheel: useMouseWheel,
     readOnly: readOnly,
     tracking: tracking,
-    onMouseDown: onMouseDown,
-    onMouseUp: onMouseUp
+    onStart: onStart,
+    onEnd: onEnd
   }),
       percentage = _useUpdate.percentage,
       value = _useUpdate.value,

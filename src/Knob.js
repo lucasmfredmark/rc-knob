@@ -25,8 +25,8 @@ export const Knob = ({
     size,
     onChange = () => {},
     onInteractiveChange = () => {},
-    onMouseDown = () => {},
-    onMouseUp = () => {},
+    onStart = () => {},
+    onEnd = () => {},
     children,
     steps,
     snap = false,
@@ -57,8 +57,8 @@ export const Knob = ({
         useMouseWheel,
         readOnly,
         tracking,
-        onMouseDown,
-        onMouseUp,
+        onStart,
+        onEnd,
     })
 
     return (

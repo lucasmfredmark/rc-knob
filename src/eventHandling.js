@@ -44,13 +44,15 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
             div.setPointerCapture(events.capturedPointerId)
             div.addEventListener('pointermove', onMove)
             div.addEventListener('pointerup', onStop)
-            div.addEventListener('pointercancel', onStop)
+            div.addEventListener('pointercancel', onCancel)
         } else {
             // fallback with mouse event
             window.addEventListener('mousemove', onMove)
             window.addEventListener('mouseup', onStop)
             events.capturedWindow = true
         }
+        div.addEventListener('contextmenu', onContextMenu)
+        events.capturedContextMenu = true
         dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'START' })
     }
     const clearCapture = () => {
@@ -58,13 +60,17 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
             div.releasePointerCapture(events.capturedPointerId)
             div.removeEventListener('pointermove', onMove)
             div.removeEventListener('pointerup', onStop)
-            div.removeEventListener('pointercancel', onStop)
+            div.removeEventListener('pointercancel', onCancel)
             events.capturedPointerId = undefined
         }
         if (events.capturedWindow) {
             window.removeEventListener('mousemove', onMove)
             window.removeEventListener('mouseup', onStop)
             events.capturedWindow = false
+        }
+        if (events.capturedContextMenu) {
+            div.removeEventListener('contextmenu', onContextMenu)
+            events.capturedContextMenu = false
         }
     }
     const onMove = e => {
@@ -75,6 +81,17 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
     const onStop = () => {
         clearCapture()
         dispatch({ type: 'STOP' })
+    }
+    const onCancel = () => {
+        clearCapture()
+        dispatch({ type: 'CANCEL' })
+    }
+    const onContextMenu = e => {
+        e.preventDefault()
+        e.stopPropagation()
+        clearCapture()
+        dispatch({ type: 'CANCEL' })
+        return false
     }
     const onWheel = useMouseWheel ? onScroll(dispatch) : null
 

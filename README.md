@@ -95,17 +95,15 @@ It is accessible by keyboard using `tab`.
 
 - `onInteractiveChange`
 
-    Callback that will pass the value when user is dragging the knob.
+    Callback that will pass the value during dragging.
 
-- `onMouseUp`
+- `onStart`
 
-    Callback that will pass the event when user press the mouse button
-    over the knob.
+    Callback triggered when the dragging start.
 
-- `onMouseDown`
+- `onEnd`
 
-    Callback that will pass the event when user release the mouse button
-    over the knob.
+    Callback triggered when the dragging end.
 
 - `readOnly`
 

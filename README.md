@@ -208,7 +208,7 @@ Renders a range between 2 angles.
 
 - `percentTo`
 
-    Endding point of the range.
+    Ending point of the range.
     If unset, `percent` value of the knob is used.
 
 ### `<Pointer/>`

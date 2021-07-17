@@ -25,6 +25,8 @@ const onStart = (state, action, callbacks) => {
         ...action,
         mouseAngle,
     })
+    const value = getValueFromPercentage({ ...state, ...position })
+    callbacks.onChange(value)
     return {
         ...state,
         isActive: true,

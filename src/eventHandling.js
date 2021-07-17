@@ -35,10 +35,6 @@ export const onScroll = dispatch => e => {
     })
 }
 
-const addEventToBody = (name, fn) => document.body.addEventListener(name, fn)
-const removeEventFromBody = (name, fn) =>
-    document.body.removeEventListener(name, fn)
-
 export const handleEventListener = ({ dispatch, isActive }) => () => {
     const onMove = (e) => {
         e.preventDefault()
@@ -47,11 +43,11 @@ export const handleEventListener = ({ dispatch, isActive }) => () => {
     }
     const onStop = () => dispatch({ type: 'STOP' })
     if (isActive) {
-        addEventToBody('mousemove', onMove)
-        addEventToBody('mouseup', onStop)
+        document.body.addEventListener('mousemove', onMove)
+        document.body.addEventListener('mouseup', onStop)
         return () => {
-            removeEventFromBody('mousemove', onMove)
-            removeEventFromBody('mouseup', onStop)
+            document.body.removeEventListener('mousemove', onMove)
+            document.body.removeEventListener('mouseup', onStop)
         }
     }
 }

@@ -5,12 +5,6 @@ const DIRECTIONS = {
     40: -1,
 }
 
-export const onMouseMoveStart = dispatch => e => {
-    e.preventDefault()
-    e.stopPropagation()
-    dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'START' })
-}
-
 export const onKeyDown = dispatch => e => {
     const direction = DIRECTIONS[e.keyCode]
     if (!direction) {
@@ -35,19 +29,46 @@ export const onScroll = dispatch => e => {
     })
 }
 
-export const handleEventListener = ({ dispatch, isActive }) => () => {
-    const onMove = (e) => {
+
+export const handleEventListener = ({ container, dispatch, useMouseWheel }) => () => {
+    const div = container.current
+    const events = Object()
+    const onStart = e => {
+        e.preventDefault()
+        e.stopPropagation()
+        window.addEventListener('mousemove', onMove)
+        window.addEventListener('mouseup', onStop)
+        events.capturedWindow = true
+        dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'START' })
+    }
+    const clearCapture = () => {
+        if (events.capturedWindow) {
+            window.removeEventListener('mousemove', onMove)
+            window.removeEventListener('mouseup', onStop)
+            events.capturedWindow = false
+        }
+    }
+    const onMove = e => {
         e.preventDefault()
         e.stopPropagation()
         dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'MOVE' })
     }
-    const onStop = () => dispatch({ type: 'STOP' })
-    if (isActive) {
-        window.addEventListener('mousemove', onMove)
-        window.addEventListener('mouseup', onStop)
-        return () => {
-            window.removeEventListener('mousemove', onMove)
-            window.removeEventListener('mouseup', onStop)
+    const onStop = () => {
+        clearCapture()
+        dispatch({ type: 'STOP' })
+    }
+    const onWheel = useMouseWheel ? onScroll(dispatch) : null
+
+    div.addEventListener("mousedown", onStart)
+    if (onWheel) {
+        div.addEventListener("wheel", onWheel)
+    }
+
+    return () => {
+        clearCapture()
+        div.removeEventListener("mousedown", onStart)
+        if (onWheel) {
+            div.removeEventListener("wheel", onWheel)
         }
     }
 }

@@ -15,7 +15,7 @@ import {
     onScroll,
 } from './eventHandling'
 
-const onStart = (state, action) => {
+const onStart = (state, action, callbacks) => {
     const center = getClientCenter(state)
     const mouseAngle = calculateMouseAngle({...center, ...action})
     const position = calculatePositionFromMouseAngle({
@@ -25,6 +25,11 @@ const onStart = (state, action) => {
         ...action,
         mouseAngle,
     })
+    const value = getValueFromPercentage({ ...state, ...position })
+    callbacks.onInteractiveChange(value)
+    if (state.tracking) {
+        callbacks.onChange(value)
+    }
     return {
         ...state,
         isActive: true,
@@ -34,7 +39,7 @@ const onStart = (state, action) => {
 }
 
 
-const onMove = ({ state, action, onChange }) => {
+const onMove = (state, action, callbacks) => {
     const mouseAngle = calculateMouseAngle({...state, ...action})
     const position = calculatePositionFromMouseAngle({
         previousMouseAngle: state.mouseAngle,
@@ -44,8 +49,10 @@ const onMove = ({ state, action, onChange }) => {
         mouseAngle,
     })
     const value = getValueFromPercentage({ ...state, ...position })
-
-    onChange(value)
+    callbacks.onInteractiveChange(value)
+    if (state.tracking) {
+        callbacks.onChange(value)
+    }
     return {
         ...state,
         ...position,
@@ -53,31 +60,35 @@ const onMove = ({ state, action, onChange }) => {
     }
 }
 
-const onChangeByStep = ({ state, action, onChange }) => {
+const onChangeByStep = (state, action, callbacks) => {
     const value = clamp(
         state.min,
         state.max,
         state.value + 1 * action.direction
     )
-    onChange(value)
+    callbacks.onChange(value)
     return {
         ...state,
         value,
         percentage: getPercentageFromValue({ ...state, value }),
     }
 }
-const reducer = (onChange, onMouseDown, onMouseUp) => (state, action) => {
+
+const reducer = (callbacks) => (state, action) => {
     switch (action.type) {
         case 'START':
-            onMouseDown()
-            return onStart(state, action)
+            callbacks.onMouseDown()
+            return onStart(state, action, callbacks)
         case 'MOVE':
-            return onMove({ state, action, onChange })
+            return onMove(state, action, callbacks)
         case 'STOP':
-            onMouseUp()
+            if (!state.tracking) {
+                callbacks.onChange(state.value)
+            }
+            callbacks.onMouseUp()
             return { ...state, isActive: false, value: state.value }
         case 'STEPS':
-            return onChangeByStep({ state, action, onChange })
+            return onChangeByStep(state, action, callbacks)
         default:
             return { ...state, isActive: false, value: state.value }
     }
@@ -93,15 +104,17 @@ export default ({
     size,
     steps,
     onChange,
-    readOnly,
-    useMouseWheel,
+    onInteractiveChange,
     onMouseDown,
     onMouseUp,
+    readOnly,
+    tracking,
+    useMouseWheel,
 }) => {
     const svg = useRef()
     const container = useRef()
     const [{ percentage, value, angle, isActive }, dispatch] = useReducer(
-        reducer(onChange, onMouseDown, onMouseUp),
+        reducer({ onChange, onInteractiveChange, onMouseDown, onMouseUp }),
         {
             isActive: false,
             min,
@@ -113,6 +126,7 @@ export default ({
             percentage: initialValue ? (initialValue - min) / (max - min) : 0,
             value: initialValue || 0,
             svg,
+            tracking,
             container,
             size,
         }

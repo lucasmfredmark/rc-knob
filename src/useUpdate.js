@@ -33,6 +33,8 @@ const onStart = (state, action, callbacks) => {
         isActive: true,
         ...position,
         ...center,
+        startPercentage: state.percentage,
+        startValue: state.value,
     }
 }
 
@@ -84,7 +86,25 @@ const reducer = (callbacks) => (state, action) => {
                 callbacks.onChange(state.value)
             }
             callbacks.onMouseUp()
-            return { ...state, isActive: false, value: state.value }
+            return {
+                ...state, isActive: false,
+                value: state.value,
+                percentage: state.percentage,
+                startPercentage: undefined,
+                startValue: undefined,
+            }
+        case 'CANCEL':
+            const percentage = state.startPercentage
+            const value = state.startValue
+            if (state.tracking) {
+                callbacks.onChange(value)
+            }
+            callbacks.onMouseUp()
+            return {
+                ...state, isActive: false, value, percentage,
+                startPercentage: undefined,
+                startValue: undefined,
+            }
         case 'STEPS':
             return onChangeByStep(state, action, callbacks)
         default:

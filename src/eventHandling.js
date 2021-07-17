@@ -86,7 +86,7 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
         e.preventDefault()
         e.stopPropagation()
         clearCapture()
-        dispatch({ type: 'STOP' })
+        dispatch({ type: 'CANCEL' })
         return false
     }
     const onWheel = useMouseWheel ? onScroll(dispatch) : null

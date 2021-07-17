@@ -244,7 +244,8 @@ prop or any SVG element that is passed as a children.
     Will be the same as `width` if not set.
 
 - `radius`
-Outer radius of the circle the pointer sits on.
+
+    Outer radius of the circle the pointer sits on.
 
 - `type`
 

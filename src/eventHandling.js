@@ -23,6 +23,7 @@ export const onKeyDown = dispatch => e => {
         })
     }
 }
+
 export const onScroll = dispatch => e => {
     const direction =
         e.deltaX < 0 || e.deltaY > 0 ? 1 : e.deltaX > 0 || e.deltaY < 0 ? -1 : 0

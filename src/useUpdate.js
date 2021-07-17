@@ -142,7 +142,6 @@ export default ({
         container,
         percentage: steps ? findClosest(steps, percentage) : percentage,
         value,
-        angle,
         onKeyDown: onKeyDown(dispatch),
     }
 }

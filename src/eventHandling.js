@@ -43,11 +43,11 @@ export const handleEventListener = ({ dispatch, isActive }) => () => {
     }
     const onStop = () => dispatch({ type: 'STOP' })
     if (isActive) {
-        document.body.addEventListener('mousemove', onMove)
-        document.body.addEventListener('mouseup', onStop)
+        window.addEventListener('mousemove', onMove)
+        window.addEventListener('mouseup', onStop)
         return () => {
-            document.body.removeEventListener('mousemove', onMove)
-            document.body.removeEventListener('mouseup', onStop)
+            window.removeEventListener('mousemove', onMove)
+            window.removeEventListener('mouseup', onStop)
         }
     }
 }

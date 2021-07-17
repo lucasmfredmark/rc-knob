@@ -36,12 +36,28 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
     const onStart = e => {
         e.preventDefault()
         e.stopPropagation()
-        window.addEventListener('mousemove', onMove)
-        window.addEventListener('mouseup', onStop)
-        events.capturedWindow = true
+        if (window.PointerEvent) {
+            events.capturedPointerId = e.pointerId
+            div.setPointerCapture(events.capturedPointerId)
+            div.addEventListener('pointermove', onMove)
+            div.addEventListener('pointerup', onStop)
+            div.addEventListener('pointercancel', onStop)
+        } else {
+            // fallback with mouse event
+            window.addEventListener('mousemove', onMove)
+            window.addEventListener('mouseup', onStop)
+            events.capturedWindow = true
+        }
         dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'START' })
     }
     const clearCapture = () => {
+        if (events.capturedPointerId !== undefined) {
+            div.releasePointerCapture(events.capturedPointerId)
+            div.removeEventListener('pointermove', onMove)
+            div.removeEventListener('pointerup', onStop)
+            div.removeEventListener('pointercancel', onStop)
+            events.capturedPointerId = undefined
+        }
         if (events.capturedWindow) {
             window.removeEventListener('mousemove', onMove)
             window.removeEventListener('mouseup', onStop)
@@ -59,14 +75,15 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
     }
     const onWheel = useMouseWheel ? onScroll(dispatch) : null
 
-    div.addEventListener("mousedown", onStart)
+    const eventdown = window.PointerEvent ? "pointerdown" : "mousedown"
+    div.addEventListener(eventdown, onStart)
     if (onWheel) {
         div.addEventListener("wheel", onWheel)
     }
 
     return () => {
         clearCapture()
-        div.removeEventListener("mousedown", onStart)
+        div.removeEventListener(eventdown, onStart)
         if (onWheel) {
             div.removeEventListener("wheel", onWheel)
         }

@@ -51,6 +51,8 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
             window.addEventListener('mouseup', onStop)
             events.capturedWindow = true
         }
+        div.addEventListener('contextmenu', onContextMenu)
+        events.capturedContextMenu = true
         dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'START' })
     }
     const clearCapture = () => {
@@ -66,6 +68,10 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
             window.removeEventListener('mouseup', onStop)
             events.capturedWindow = false
         }
+        if (events.capturedContextMenu) {
+            div.removeEventListener('contextmenu', onContextMenu)
+            events.capturedContextMenu = false
+        }
     }
     const onMove = e => {
         e.preventDefault()
@@ -75,6 +81,13 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
     const onStop = () => {
         clearCapture()
         dispatch({ type: 'STOP' })
+    }
+    const onContextMenu = e => {
+        e.preventDefault()
+        e.stopPropagation()
+        clearCapture()
+        dispatch({ type: 'STOP' })
+        return false
     }
     const onWheel = useMouseWheel ? onScroll(dispatch) : null
 

@@ -34,6 +34,9 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
     const div = container.current
     const events = Object()
     const onStart = e => {
+        if (e.pointerType == "mouse" && e.button != 0) {
+            return
+        }
         e.preventDefault()
         e.stopPropagation()
         if (window.PointerEvent) {

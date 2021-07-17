@@ -5,6 +5,7 @@ import { Pointer } from './Pointer'
 import { Scale } from './Scale'
 import { Value } from './Value'
 import { Range } from './Range'
+import { Spiral } from './Spiral'
 
 const stepsToSnapTo = (steps, snap) =>
     steps && snap
@@ -12,7 +13,7 @@ const stepsToSnapTo = (steps, snap) =>
         : undefined
 
 const isInternalComponent = ({ type }) =>
-    type === Arc || type === Pointer || type === Scale || type === Value || type === Range
+    type === Arc || type === Pointer || type === Scale || type === Value || type === Range || type === Spiral
 
 export const Knob = ({
     min,

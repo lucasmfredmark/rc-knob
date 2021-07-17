@@ -208,7 +208,40 @@ Renders a range between 2 angles.
 
 - `percentTo`
 
-    Endding point of the range.
+    Ending point of the range.
+    If unset, `percent` value of the knob is used.
+
+### `<Spiral/>`
+
+Renders a spiral between 2 angles.
+
+#### Props
+
+- `arcWidth`
+
+    Width of the spiral line.
+    The spiral will expand to the centre.
+
+- `color`
+
+    Color of the spiral.
+
+- `radiusFrom`
+
+    Outer radius of the start point of the spiral.
+
+- `radiusTo`
+
+    Outer radius of the ending point of the spiral.
+
+- `percentFrom`
+
+    Starting point of the spiral.
+    If unset, `percent` value of the knob is used.
+
+- `percentTo`
+
+    Ending point of the spiral.
     If unset, `percent` value of the knob is used.
 
 ### `<Pointer/>`
@@ -244,7 +277,8 @@ prop or any SVG element that is passed as a children.
     Will be the same as `width` if not set.
 
 - `radius`
-Outer radius of the circle the pointer sits on.
+
+    Outer radius of the circle the pointer sits on.
 
 - `type`
 

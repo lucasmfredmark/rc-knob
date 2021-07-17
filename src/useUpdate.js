@@ -26,7 +26,10 @@ const onStart = (state, action, callbacks) => {
         mouseAngle,
     })
     const value = getValueFromPercentage({ ...state, ...position })
-    callbacks.onChange(value)
+    callbacks.onInteractiveChange(value)
+    if (state.tracking) {
+        callbacks.onChange(value)
+    }
     return {
         ...state,
         isActive: true,
@@ -46,7 +49,10 @@ const onMove = (state, action, callbacks) => {
         mouseAngle,
     })
     const value = getValueFromPercentage({ ...state, ...position })
-    callbacks.onChange(value)
+    callbacks.onInteractiveChange(value)
+    if (state.tracking) {
+        callbacks.onChange(value)
+    }
     return {
         ...state,
         ...position,
@@ -76,6 +82,9 @@ const reducer = (callbacks) => (state, action) => {
         case 'MOVE':
             return onMove(state, action, callbacks)
         case 'STOP':
+            if (!state.tracking) {
+                callbacks.onChange(state.value)
+            }
             callbacks.onMouseUp()
             return { ...state, isActive: false, value: state.value }
         case 'STEPS':
@@ -95,15 +104,17 @@ export default ({
     size,
     steps,
     onChange,
-    readOnly,
-    useMouseWheel,
+    onInteractiveChange,
     onMouseDown,
     onMouseUp,
+    readOnly,
+    tracking,
+    useMouseWheel,
 }) => {
     const svg = useRef()
     const container = useRef()
     const [{ percentage, value, angle, isActive }, dispatch] = useReducer(
-        reducer({ onChange, onMouseDown, onMouseUp }),
+        reducer({ onChange, onInteractiveChange, onMouseDown, onMouseUp }),
         {
             isActive: false,
             min,
@@ -115,6 +126,7 @@ export default ({
             percentage: initialValue ? (initialValue - min) / (max - min) : 0,
             value: initialValue || 0,
             svg,
+            tracking,
             container,
             size,
         }

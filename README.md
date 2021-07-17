@@ -89,6 +89,14 @@ It is accessible by keyboard using `tab`.
 
     Callback that will pass the value when user interact with the knob.
 
+    If `tracking=false` this callback is not called during mouse
+    dragging, but is triggered when the mouse is release (if the value
+    have changed)
+
+- `onInteractiveChange`
+
+    Callback that will pass the value when user is dragging the knob.
+
 - `onMouseUp`
 
     Callback that will pass the event when user press the mouse button
@@ -126,6 +134,17 @@ It is accessible by keyboard using `tab`.
 
     Number of steps the knob can snap to.
     It's also used to calculate the single steps for the `Scale` component. 
+
+- `tracking`
+
+    This propery control the behaviour of `onChange` during mouse
+    dragging. Default if `true`.
+
+    If `true`, `onChange` is triggered during mouse dragging.
+
+    If `false`, `onChange` is not triggered during mouse dragging,
+    but is triggered when the mouse is release (if the value
+    have changed).
 
 - `value`
 

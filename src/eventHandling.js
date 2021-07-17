@@ -5,12 +5,6 @@ const DIRECTIONS = {
     40: -1,
 }
 
-export const onMouseMoveStart = dispatch => e => {
-    e.preventDefault()
-    e.stopPropagation()
-    dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'START' })
-}
-
 export const onKeyDown = dispatch => e => {
     const direction = DIRECTIONS[e.keyCode]
     if (!direction) {
@@ -23,6 +17,7 @@ export const onKeyDown = dispatch => e => {
         })
     }
 }
+
 export const onScroll = dispatch => e => {
     const direction =
         e.deltaX < 0 || e.deltaY > 0 ? 1 : e.deltaX > 0 || e.deltaY < 0 ? -1 : 0
@@ -34,23 +29,63 @@ export const onScroll = dispatch => e => {
     })
 }
 
-const addEventToBody = (name, fn) => document.body.addEventListener(name, fn)
-const removeEventFromBody = (name, fn) =>
-    document.body.removeEventListener(name, fn)
 
-export const handleEventListener = ({ dispatch, isActive }) => () => {
-    const onMove = (e) => {
+export const handleEventListener = ({ container, dispatch, useMouseWheel }) => () => {
+    const div = container.current
+    const events = Object()
+    const onStart = e => {
+        e.preventDefault()
+        e.stopPropagation()
+        if (window.PointerEvent) {
+            events.capturedPointerId = e.pointerId
+            div.setPointerCapture(events.capturedPointerId)
+            div.addEventListener('pointermove', onMove)
+            div.addEventListener('pointerup', onStop)
+            div.addEventListener('pointercancel', onStop)
+        } else {
+            // fallback with mouse event
+            window.addEventListener('mousemove', onMove)
+            window.addEventListener('mouseup', onStop)
+            events.capturedWindow = true
+        }
+        dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'START' })
+    }
+    const clearCapture = () => {
+        if (events.capturedPointerId !== undefined) {
+            div.releasePointerCapture(events.capturedPointerId)
+            div.removeEventListener('pointermove', onMove)
+            div.removeEventListener('pointerup', onStop)
+            div.removeEventListener('pointercancel', onStop)
+            events.capturedPointerId = undefined
+        }
+        if (events.capturedWindow) {
+            window.removeEventListener('mousemove', onMove)
+            window.removeEventListener('mouseup', onStop)
+            events.capturedWindow = false
+        }
+    }
+    const onMove = e => {
         e.preventDefault()
         e.stopPropagation()
         dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'MOVE' })
     }
-    const onStop = () => dispatch({ type: 'STOP' })
-    if (isActive) {
-        addEventToBody('mousemove', onMove)
-        addEventToBody('mouseup', onStop)
-        return () => {
-            removeEventFromBody('mousemove', onMove)
-            removeEventFromBody('mouseup', onStop)
+    const onStop = () => {
+        clearCapture()
+        dispatch({ type: 'STOP' })
+    }
+    const onWheel = useMouseWheel ? onScroll(dispatch) : null
+
+    const eventdown = window.PointerEvent ? "pointerdown" : "mousedown"
+    div.addEventListener(eventdown, onStart)
+    if (onWheel) {
+        div.addEventListener("wheel", onWheel)
+    }
+
+    return () => {
+        clearCapture()
+        div.removeEventListener(eventdown, onStart)
+        if (onWheel) {
+            div.removeEventListener("wheel", onWheel)
         }
     }
 }

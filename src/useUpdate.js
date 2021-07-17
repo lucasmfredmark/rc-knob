@@ -9,10 +9,8 @@ import {
     getPercentageFromValue,
 } from './utils'
 import {
-    onMouseMoveStart,
     onKeyDown,
     handleEventListener,
-    onScroll,
 } from './eventHandling'
 
 const onStart = (state, action, callbacks) => {
@@ -133,24 +131,12 @@ export default ({
     )
 
     if (!readOnly) {
-        useEffect(() => {
-            const div = container.current
-            const onStart = onMouseMoveStart(dispatch)
-            const onWheel = useMouseWheel ? onScroll(dispatch) : null
-            div.addEventListener("mousedown", onStart)
-            if (onWheel) {
-                div.addEventListener("wheel", onWheel)
-            }
-            return () => {
-                div.removeEventListener("mousedown", onStart)
-                if (onWheel) {
-	                div.removeEventListener("wheel", onWheel)
-                }
-            }
-        }, [useMouseWheel])
+        useEffect(handleEventListener(
+            { container, dispatch, useMouseWheel }),
+            [useMouseWheel]
+        )
     }
 
-    useEffect(handleEventListener({ dispatch, isActive }), [isActive])
     return {
         svg,
         container,

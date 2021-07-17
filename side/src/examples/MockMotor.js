@@ -45,7 +45,7 @@ export const MockMotor = ({
   return (
     <div>
         Position: {internalPosition.toFixed(2)} <br />
-        {validTarget(target, internalPosition) ? "Target: " + target.toFixed(2) : ""}
+        Target: {validTarget(target, internalPosition) ? target.toFixed(2) : "----"}
     </div>
   );
 };

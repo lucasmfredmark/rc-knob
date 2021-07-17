@@ -6,8 +6,8 @@ describe('Knob', () => {
     it('provides the expected mouse API', () => {
         const component = shallow(
             <Knob
-                onMouseUp={(() => { })}
-                onMouseDown={(() => { })}
+                onStart={(() => { })}
+                onEnd={(() => { })}
                 onChange={(e => { })}
             />
         )

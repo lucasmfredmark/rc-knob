@@ -40,7 +40,7 @@ function MotorKnob({
       max={360}
       onChange={onChange}
       onInteractiveChange={onKnobInteractiveChange}
-      onMouseUp={onKnobMouseUp}
+      onEnd={onKnobMouseUp}
       tracking={false}
       multiRotation={true}
     >

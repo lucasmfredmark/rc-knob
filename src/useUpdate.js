@@ -14,7 +14,6 @@ import {
 } from './eventHandling'
 
 const reduceOnStart = (state, action, callbacks) => {
-    callbacks.onMouseDown()
     const center = getClientCenter(state)
     const mouseAngle = calculateMouseAngle({...center, ...action})
     const position = calculatePositionFromMouseAngle({
@@ -25,6 +24,7 @@ const reduceOnStart = (state, action, callbacks) => {
         mouseAngle,
     })
     const value = getValueFromPercentage({ ...state, ...position })
+    callbacks.onStart()
     callbacks.onInteractiveChange(value)
     if (state.tracking) {
         callbacks.onChange(value)
@@ -65,7 +65,7 @@ const reduceOnStop = (state, action, callbacks) => {
     if (!state.tracking) {
         callbacks.onChange(state.value)
     }
-    callbacks.onMouseUp()
+    callbacks.onEnd()
     return {
         ...state, isActive: false,
         value: state.value,
@@ -78,10 +78,10 @@ const reduceOnStop = (state, action, callbacks) => {
 const reduceOnCancel = (state, action, callbacks) => {
     const percentage = state.startPercentage
     const value = state.startValue
+    callbacks.onEnd()
     if (state.tracking) {
         callbacks.onChange(value)
     }
-    callbacks.onMouseUp()
     return {
         ...state, isActive: false, value, percentage,
         startPercentage: undefined,
@@ -131,8 +131,8 @@ export default ({
     steps,
     onChange,
     onInteractiveChange,
-    onMouseDown,
-    onMouseUp,
+    onStart,
+    onEnd,
     readOnly,
     tracking,
     useMouseWheel,
@@ -140,7 +140,7 @@ export default ({
     const svg = useRef()
     const container = useRef()
     const [{ percentage, value, angle, isActive }, dispatch] = useReducer(
-        reducer({ onChange, onInteractiveChange, onMouseDown, onMouseUp }),
+        reducer({ onChange, onInteractiveChange, onStart, onEnd }),
         {
             isActive: false,
             min,

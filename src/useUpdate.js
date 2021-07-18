@@ -14,7 +14,7 @@ import {
 } from './eventHandling'
 
 const reduceOnStart = (state, action, callbacks) => {
-    const center = getClientCenter(state)
+    const center = getClientCenter(state.container)
     const mouseAngle = calculateMouseAngle({...center, ...action})
     const position = calculatePositionFromMouseAngle({
         previousMouseAngle: null,

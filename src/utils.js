@@ -123,10 +123,11 @@ export const getValueFromPercentage = ({ min, max, percentage }) =>
 export const getPercentageFromValue = ({ min, max, value }) =>
     (value - min) / (max - min)
 
-export const getClientCenter = ({ container, size }) => {
-    const rect = container.current.getBoundingClientRect();
+export const getClientCenter = (container) => {
+    const elem = container.current
+    const rect = elem.getBoundingClientRect()
     return {
-        centerX: rect.x + size / 2,
-        centerY: rect.y + size / 2,
+        centerX: rect.x + elem.clientWidth / 2,
+        centerY: rect.y + elem.clientHeight / 2,
     }
 }

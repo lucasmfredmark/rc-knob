@@ -39,6 +39,7 @@ export default function InfiniteKnob360({
   const pointerPosRadius = outerKnobRadius - pointerMargin - pointerSize / 2;
   const delta = Origin[origin];
   const editable = !disabled && !readOnly;
+  const shadowWidth = 5
 
   const localTarget = (editedValue !== null) ? editedValue : target
 
@@ -57,13 +58,74 @@ export default function InfiniteKnob360({
       readOnly={!editable}
       tracking={false}
     >
+      <defs>
+        <radialGradient
+          id="knob-shadow"
+          cx={size / 2}
+          cy={size / 2}
+          fx={size * 0.75}
+          fy={size * 0.75}
+          r={outerKnobRadius + shadowWidth}
+          gradientUnits="userSpaceOnUse"
+          >
+          <stop
+            offset={outerKnobRadius / (outerKnobRadius + shadowWidth)}
+            stopColor="#000000"
+            stopOpacity="0.1" />
+          <stop
+            offset={1}
+            stopColor="#000000"
+            stopOpacity="0" />
+        </radialGradient>
+        <linearGradient
+           id="knob-enabled"
+           x1={0}
+           y1={size / 2 - outerKnobRadius}
+           x2={0}
+           y2={size / 2 + outerKnobRadius}
+           gradientUnits="userSpaceOnUse">
+          <stop
+             offset="0%"
+             stopColor="#e9ecef" />
+          <stop
+             offset="30%"
+             stopColor="#fff" />
+          <stop
+             offset="70%"
+             stopColor="#fff" />
+          <stop
+             offset="100%"
+             stopColor="#e9ecef" />
+        </linearGradient>
+        <linearGradient
+           id="knob-disabled"
+           x1={0}
+           y1={size / 2 - outerKnobRadius}
+           x2={0}
+           y2={size / 2 + outerKnobRadius}
+           gradientUnits="userSpaceOnUse">
+          <stop
+             offset="0%"
+             stopColor="#d9dcdf" />
+          <stop
+             offset="50%"
+             stopColor="#e9ecef" />
+          <stop
+             offset="100%"
+             stopColor="#d9dcdf" />
+        </linearGradient>
+      </defs>
+      <circle
+        r={outerKnobRadius + shadowWidth}
+        cx={size / 2}
+        cy={size / 2}
+        fill="url(#knob-shadow)"
+      />
       <circle
         r={outerKnobRadius}
         cx={size / 2}
         cy={size / 2}
-        fill={editable ? '#fff' : '#e9ecef'}
-        stroke={editable ? '#ced4da' : '#e9ecef'}
-        strokeWidth={1}
+        fill={editable ? "url(#knob-enabled)" : 'url(#knob-disabled)'}
       />
       <Scale
         steps={8}

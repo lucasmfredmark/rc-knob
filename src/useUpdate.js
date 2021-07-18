@@ -2,11 +2,11 @@ import { useReducer, useEffect, useRef } from 'react'
 import {
     calculatePositionFromMouseAngle,
     calculateMouseAngle,
-    findClosest,
     getClientCenter,
     getValueFromPercentage,
     clamp,
     getPercentageFromValue,
+    snapPosition,
 } from './utils'
 import {
     onKeyDown,
@@ -23,7 +23,8 @@ const reduceOnStart = (state, action, callbacks) => {
         ...action,
         mouseAngle,
     })
-    const value = getValueFromPercentage({ ...state, ...position })
+    const position2 = snapPosition(position, state)
+    const value = getValueFromPercentage({ ...state, ...position2 })
     callbacks.onStart()
     callbacks.onInteractiveChange(value)
     if (state.tracking) {
@@ -32,7 +33,7 @@ const reduceOnStart = (state, action, callbacks) => {
     return {
         ...state,
         isActive: true,
-        ...position,
+        ...position2,
         ...center,
         startPercentage: state.percentage,
         startValue: state.value,
@@ -50,14 +51,15 @@ const reduceOnMove = (state, action, callbacks) => {
         ...action,
         mouseAngle,
     })
-    const value = getValueFromPercentage({ ...state, ...position })
+    const position2 = snapPosition(position, state)
+    const value = getValueFromPercentage({ ...state, ...position2 })
     callbacks.onInteractiveChange(value)
     if (state.tracking) {
         callbacks.onChange(value)
     }
     return {
         ...state,
-        ...position,
+        ...position2,
         value,
     }
 }
@@ -156,6 +158,7 @@ export default ({
             tracking,
             container,
             size,
+            steps,
         }
     )
 
@@ -169,8 +172,8 @@ export default ({
     return {
         svg,
         container,
-        percentage: steps ? findClosest(steps, percentage) : percentage,
-        value,
+        percentage: percentage,
+        value: value,
         onKeyDown: onKeyDown(dispatch),
     }
 }

@@ -81,21 +81,6 @@ describe('utils', () => {
         })
     })
 
-    describe('findClosest', () => {
-        it('Value part of the list', () => {
-            const result = findClosest([0,1,2,3], 2)
-            expect(result).toBe(2)
-        })
-        it('Value not part of the list', () => {
-            const result = findClosest([0,1,2,3], 1.1)
-            expect(result).toBe(1)
-        })
-        it('List is empty', () => {
-            const result = findClosest([], 1.1)
-            expect(result).toBe(undefined)
-        })
-    })
-
     describe('snapPercentage', () => {
         it('first value', () => {
             const result = snapPercentage(0, 4)

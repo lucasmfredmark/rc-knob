@@ -117,19 +117,6 @@ export const snapPercentage = (percentage, nbIntervals) => {
     return sign * (p - stepSize * 0.5) + sign * (stepSize - extra)
 }
 
-export const findClosest = (values, value) => {
-    let result
-    let lastDelta = Infinity
-    values.forEach(item => {
-        const delta = Math.abs(value - item)
-        if (delta < lastDelta) {
-            result = item
-            lastDelta = delta
-        }
-    })
-    return result
-}
-
 export const getValueFromPercentage = ({ min, max, percentage }) =>
     min + (max - min) * percentage
 

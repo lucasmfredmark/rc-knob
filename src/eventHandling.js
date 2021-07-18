@@ -61,8 +61,28 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel, intera
     const div = container.current
     const events = Object()
 
+    const getInteractiveConfig = (mousePosition, e) => {
+        let userConfig = {}
+        if (interactiveHook) {
+            const event = {
+                ctrlKey: e.ctrlKey,
+                altKey: e.altKey,
+                metaKey: e.metaKey,
+                shiftKey: e.shiftKey,
+                ...mousePosition
+            }
+            userConfig = interactiveHook(event)
+        }
+        return userConfig
+    }
+
     const onStart = e => {
         if (e.pointerType == "mouse" && e.button != 0) {
+            return
+        }
+        const mousePosition = getMousePosition(div, e)
+        const userConfig = getInteractiveConfig(mousePosition, e)
+        if (userConfig.readOnly) {
             return
         }
         e.preventDefault()
@@ -81,8 +101,7 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel, intera
         }
         div.addEventListener('contextmenu', onContextMenu)
         events.capturedContextMenu = true
-        const mousePosition = getMousePosition(div, e)
-        dispatch({ type: 'START', ...mousePosition })
+        dispatch({ type: 'START', ...mousePosition, ...userConfig })
     }
     const clearCapture = () => {
         if (events.capturedPointerId !== undefined) {
@@ -106,7 +125,11 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel, intera
         e.preventDefault()
         e.stopPropagation()
         const mousePosition = getMousePosition(div, e)
-        dispatch({ type: 'MOVE', ...mousePosition })
+        const userConfig = getInteractiveConfig(mousePosition, e)
+        if (userConfig.readOnly) {
+            return
+        }
+        dispatch({ type: 'MOVE', ...mousePosition, ...userConfig })
     }
     const onStop = () => {
         clearCapture()

@@ -82,11 +82,11 @@ export const calculatePositionFromMouseAngle = ({
     }
 }
 
-export const snapPosition = (position, state) => {
-    if (!position.updated || !state.steps) {
+export const snapPosition = (position, state, steps) => {
+    if (!position.updated || !steps) {
         return position
     }
-    const percentage = snapPercentage(position.percentage, state.steps)
+    const percentage = snapPercentage(position.percentage, steps)
     const mouseAngle = (state.angleOffset + state.angleRange * percentage) % 360
     return {
         ...position,

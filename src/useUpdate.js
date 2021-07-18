@@ -18,7 +18,8 @@ const reduceOnStart = (state, action, callbacks) => {
         ...state,
         ...action,
     })
-    const position2 = snapPosition(position, state)
+    const steps = action.steps || state.steps
+    const position2 = snapPosition(position, state, steps)
     const value = getValueFromPercentage({ ...state, ...position2 })
     callbacks.onStart()
     callbacks.onInteractiveChange(value)
@@ -43,7 +44,8 @@ const reduceOnMove = (state, action, callbacks) => {
         ...state,
         ...action,
     })
-    const position2 = snapPosition(position, state)
+    const steps = action.steps || state.steps
+    const position2 = snapPosition(position, state, steps)
     const value = getValueFromPercentage({ ...state, ...position2 })
     callbacks.onInteractiveChange(value)
     if (state.tracking) {
@@ -126,6 +128,7 @@ export default ({
     steps,
     onChange,
     onInteractiveChange,
+    interactiveHook,
     onStart,
     onEnd,
     readOnly,
@@ -134,8 +137,14 @@ export default ({
 }) => {
     const svg = useRef()
     const container = useRef()
+    const callbacks = {
+	    onChange,
+        onInteractiveChange,
+        onStart,
+        onEnd,
+    }
     const [{ percentage, value, angle, isActive }, dispatch] = useReducer(
-        reducer({ onChange, onInteractiveChange, onStart, onEnd }),
+        reducer(callbacks),
         {
             isActive: false,
             min,
@@ -156,8 +165,8 @@ export default ({
 
     if (!readOnly) {
         useEffect(handleEventListener(
-            { container, dispatch, useMouseWheel }),
-            [useMouseWheel]
+            { container, dispatch, useMouseWheel, interactiveHook }),
+            [useMouseWheel, interactiveHook]
         )
     }
 

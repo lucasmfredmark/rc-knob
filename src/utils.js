@@ -1,18 +1,5 @@
 export const clamp = (min, max, value) => Math.max(min, Math.min(max, value))
 
-export const calculateMouseAngle = ({
-    centerX,
-    centerY,
-    clientX,
-    clientY,
-}) => {
-    const x = clientX - centerX
-    const y = clientY - centerY
-    const degree = (Math.atan2(y, x) * 180) / Math.PI + 90
-    const angle = degree < 0 ? degree + 360 : degree
-    return angle
-}
-
 export const calculatePercentageFromMouseAngle = ({
     mouseAngle,
     angleOffset,
@@ -122,12 +109,3 @@ export const getValueFromPercentage = ({ min, max, percentage }) =>
 
 export const getPercentageFromValue = ({ min, max, value }) =>
     (value - min) / (max - min)
-
-export const getClientCenter = (container) => {
-    const elem = container.current
-    const rect = elem.getBoundingClientRect()
-    return {
-        centerX: rect.x + elem.clientWidth / 2,
-        centerY: rect.y + elem.clientHeight / 2,
-    }
-}

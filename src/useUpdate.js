@@ -1,8 +1,6 @@
 import { useReducer, useEffect, useRef } from 'react'
 import {
     calculatePositionFromMouseAngle,
-    calculateMouseAngle,
-    getClientCenter,
     getValueFromPercentage,
     clamp,
     getPercentageFromValue,
@@ -14,14 +12,11 @@ import {
 } from './eventHandling'
 
 const reduceOnStart = (state, action, callbacks) => {
-    const center = getClientCenter(state.container)
-    const mouseAngle = calculateMouseAngle({...center, ...action})
     const position = calculatePositionFromMouseAngle({
         previousMouseAngle: null,
         previousPercentage: null,
         ...state,
         ...action,
-        mouseAngle,
     })
     const position2 = snapPosition(position, state)
     const value = getValueFromPercentage({ ...state, ...position2 })
@@ -34,7 +29,6 @@ const reduceOnStart = (state, action, callbacks) => {
         ...state,
         isActive: true,
         ...position2,
-        ...center,
         startPercentage: state.percentage,
         startValue: state.value,
         value
@@ -43,13 +37,11 @@ const reduceOnStart = (state, action, callbacks) => {
 
 
 const reduceOnMove = (state, action, callbacks) => {
-    const mouseAngle = calculateMouseAngle({...state, ...action})
     const position = calculatePositionFromMouseAngle({
         previousMouseAngle: state.mouseAngle,
         previousPercentage: state.percentage,
         ...state,
         ...action,
-        mouseAngle,
     })
     const position2 = snapPosition(position, state)
     const value = getValueFromPercentage({ ...state, ...position2 })

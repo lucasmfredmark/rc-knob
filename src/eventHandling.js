@@ -29,10 +29,38 @@ export const onScroll = dispatch => e => {
     })
 }
 
+const getClientCenter = (elem) => {
+    const rect = elem.getBoundingClientRect()
+    return {
+        centerX: rect.x + elem.clientWidth / 2,
+        centerY: rect.y + elem.clientHeight / 2,
+    }
+}
 
-export const handleEventListener = ({ container, dispatch, useMouseWheel }) => () => {
+/**
+ * Compute mouse position relative to the elem center
+ * and a polar position with angle in degree and radius
+ */
+const getMousePosition = (elem, e) => {
+    const {centerX, centerY} = getClientCenter(elem)
+
+    const mouseX = e.clientX - centerX
+    const mouseY = e.clientY - centerY
+    const degree = (Math.atan2(mouseY, mouseX) * 180) / Math.PI + 90
+    const mouseAngle = degree < 0 ? degree + 360 : degree
+    const mouseRadius = Math.sqrt(mouseX * mouseX + mouseY * mouseY)
+    return {
+        mouseX: mouseX,
+        mouseY: mouseY,
+        mouseRadius: mouseRadius,
+        mouseAngle: mouseAngle,
+    }
+}
+
+export const handleEventListener = ({ container, dispatch, useMouseWheel, interactiveHook }) => () => {
     const div = container.current
     const events = Object()
+
     const onStart = e => {
         if (e.pointerType == "mouse" && e.button != 0) {
             return
@@ -53,7 +81,8 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
         }
         div.addEventListener('contextmenu', onContextMenu)
         events.capturedContextMenu = true
-        dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'START' })
+        const mousePosition = getMousePosition(div, e)
+        dispatch({ type: 'START', ...mousePosition })
     }
     const clearCapture = () => {
         if (events.capturedPointerId !== undefined) {
@@ -76,7 +105,8 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel }) => (
     const onMove = e => {
         e.preventDefault()
         e.stopPropagation()
-        dispatch({ clientX: e.clientX, clientY: e.clientY, type: 'MOVE' })
+        const mousePosition = getMousePosition(div, e)
+        dispatch({ type: 'MOVE', ...mousePosition })
     }
     const onStop = () => {
         clearCapture()

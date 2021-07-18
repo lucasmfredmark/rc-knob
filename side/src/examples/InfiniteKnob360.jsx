@@ -22,7 +22,7 @@ export default function InfiniteKnob360({
 }) {
   const [editedValue, setEditedValue] = React.useState(null)
 
-  function onKnobEnd(e) {
+  function onKnobEnd() {
     setEditedValue(null)
   }
 
@@ -40,20 +40,34 @@ export default function InfiniteKnob360({
   const delta = Origin[origin];
   const editable = !disabled && !readOnly;
   const shadowWidth = 5
-
   const localTarget = (editedValue !== null) ? editedValue : target
+
+  function interactiveHook(e) {
+    if (e.mouseRadius < outerKnobRadius / 3) {
+      return { readOnly: true }
+    }
+    if (e.ctrlKey) {
+      return { steps: 8 }
+    }
+    if (outerTickRadius - tickSize - tickMargin <= e.mouseRadius &&
+      e.mouseRadius <= outerTickRadius + tickMargin) {
+      return { steps: 8 }
+    }
+    return {}
+  }
 
   return (
     <Knob
       size={size}
       value={value}
       angleOffset={delta}
-      angleRange={359.99}
+      angleRange={360}
       min={0}
       max={360}
       multiRotation={true}
       onChange={onChange}
       onInteractiveChange={onKnobInteractiveChange}
+      interactiveHook={interactiveHook}
       onEnd={onKnobEnd}
       readOnly={!editable}
       tracking={false}

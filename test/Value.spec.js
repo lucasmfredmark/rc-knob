@@ -9,6 +9,12 @@ describe('Value', () => {
         )
         expect(component).toMatchSnapshot()
     })
+    it('renders correct with a negative 0', () => {
+        const component = shallow(
+            <Value size={50} value={-0.001} decimalPlace={2} className="someClassName" />
+        )
+        expect(component).toMatchSnapshot()
+    })
     it('renders nothing correct without a given value', () => {
         const component = shallow(<Value size={50} className="someClassName" />)
         expect(component.html()).toBe(null)

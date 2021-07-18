@@ -95,6 +95,28 @@ export const calculatePositionFromMouseAngle = ({
     }
 }
 
+export const snapPosition = (position, state) => {
+    if (!position.updated || !state.steps) {
+        return position
+    }
+    const percentage = snapPercentage(position.percentage, state.steps)
+    const mouseAngle = (state.angleOffset + state.angleRange * percentage) % 360
+    return {
+        ...position,
+        percentage,
+        mouseAngle
+    }
+}
+
+export const snapPercentage = (percentage, nbIntervals) => {
+    if (percentage === 0) return 0
+    const sign = Math.sign(percentage)
+	const p = Math.abs(percentage)
+    const stepSize = 1 / nbIntervals
+    const extra = (p + stepSize * 0.5) % stepSize
+    return sign * (p - stepSize * 0.5) + sign * (stepSize - extra)
+}
+
 export const findClosest = (values, value) => {
     let result
     let lastDelta = Infinity

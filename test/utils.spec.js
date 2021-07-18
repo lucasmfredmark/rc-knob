@@ -1,4 +1,4 @@
-import { clamp, findClosest, calculatePositionFromMouseAngle } from '../src/utils'
+import { clamp, findClosest, snapPercentage, calculatePositionFromMouseAngle } from '../src/utils'
 
 describe('utils', () => {
     it('clamp value', () => {
@@ -93,6 +93,37 @@ describe('utils', () => {
         it('List is empty', () => {
             const result = findClosest([], 1.1)
             expect(result).toBe(undefined)
+        })
+    })
+
+    describe('snapPercentage', () => {
+        it('first value', () => {
+            const result = snapPercentage(0, 4)
+            expect(result).toEqual(0)
+        })
+    })
+    describe('snapPercentage', () => {
+        it('last value', () => {
+            const result = snapPercentage(1, 4)
+            expect(result).toEqual(1)
+        })
+    })
+    describe('snapPercentage', () => {
+        it('lower than a value', () => {
+            const result = snapPercentage(0.25 - 0.001, 4)
+            expect(result).toEqual(0.25)
+        })
+    })
+    describe('snapPercentage', () => {
+        it('bigger than a value', () => {
+            const result = snapPercentage(0.25 + 0.001, 4)
+            expect(result).toEqual(0.25)
+        })
+    })
+    describe('snapPercentage', () => {
+        it('negative value', () => {
+            const result = snapPercentage(-0.5 + 0.001, 4)
+            expect(result).toEqual(-0.5)
         })
     })
 })

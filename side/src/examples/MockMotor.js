@@ -29,7 +29,6 @@ export const MockMotor = ({
         const direction = target > position ? 1 : -1;
         position = position + direction * deltaPosition;
       }
-      console.log("pos", position);
       setInternalPosition(position);
       onChange(position);
     }

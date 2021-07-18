@@ -6,8 +6,16 @@ export const Value = ({
     decimalPlace = 0,
     className,
     marginBottom = 0,
-}) =>
-    value == null ? null : (
+}) => {
+    if (value === null || value === undefined) {
+        return null
+    }
+    let label = value.toFixed(decimalPlace)
+    // make sure no negative zero is displayed
+    if (label.startsWith("-") && label == 0) {
+        label = label.slice(1)
+    }
+    return (
         <text
             style={{ userSelect: 'none' }}
             x="50%"
@@ -15,6 +23,7 @@ export const Value = ({
             className={className}
             y={size - marginBottom}
         >
-            {value.toFixed(decimalPlace)}
+            {label}
         </text>
     )
+}

@@ -67,8 +67,9 @@ export const Range = ({
         pto = percentage
     }
     // Clamp
-    if (Math.abs(pto - pfrom) > 1) {
-        pto = pfrom + 1
+    if (Math.abs(pto - pfrom) >= 1) {
+        pfrom = 0
+        pto = 0.9999
     }
     const d = calcPath({percentageFrom:pfrom, percentageTo:pto, ...props})
     return (<g>

@@ -36,6 +36,7 @@ const reduceOnStart = (state, action, callbacks) => {
         ...center,
         startPercentage: state.percentage,
         startValue: state.value,
+        value
     }
 }
 

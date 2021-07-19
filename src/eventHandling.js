@@ -77,7 +77,7 @@ export const handleEventListener = ({ container, dispatch, useMouseWheel, intera
     }
 
     const onStart = e => {
-        if (e.pointerType == "mouse" && e.button != 0) {
+        if (e.pointerType === "mouse" && e.button !== 0) {
             return
         }
         const mousePosition = getMousePosition(div, e)

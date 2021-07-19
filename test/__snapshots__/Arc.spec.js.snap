@@ -2,42 +2,50 @@
 
 exports[`Arc renders correct with background color is given 1`] = `
 <g>
-  <path
-    d="M3.061616997868383e-15,50 A50,50 0 1 0 3.061616997868383e-15,-50L2.7554552980815448e-15,-45 A45,45 0 1 1 2.7554552980815448e-15,45 L3.061616997868383e-15,50"
-    style={
-      Object {
-        "fill": "red",
-      }
-    }
+  <Range
+    angleOffset={0}
+    angleRange={180}
+    arcWidth={5}
+    center={0}
+    color="red"
+    percentageFrom={50}
+    percentageTo={1}
+    radius={50}
   />
-  <path
-    d="M3.1862481100111774e-13,-50 A50,50 0 1 0 3.061616997868383e-15,-50L2.7554552980815448e-15,-45 A45,45 0 1 1 2.8676232990100596e-13,-45 L3.1862481100111774e-13,-50"
-    style={
-      Object {
-        "fill": "lime",
-      }
-    }
+  <Range
+    angleOffset={0}
+    angleRange={180}
+    arcWidth={5}
+    center={0}
+    color="lime"
+    percentageFrom={0}
+    percentageTo={50}
+    radius={50}
   />
 </g>
 `;
 
 exports[`Arc renders correct without background color is given 1`] = `
 <g>
-  <path
-    d="M3.061616997868383e-15,50 A50,50 0 1 0 3.061616997868383e-15,-50L2.7554552980815448e-15,-45 A45,45 0 1 1 2.7554552980815448e-15,45 L3.061616997868383e-15,50"
-    style={
-      Object {
-        "fill": "red",
-      }
-    }
+  <Range
+    angleOffset={0}
+    angleRange={180}
+    arcWidth={5}
+    center={0}
+    color="red"
+    percentageFrom={50}
+    percentageTo={1}
+    radius={50}
   />
-  <path
-    d="M3.1862481100111774e-13,-50 A50,50 0 1 0 3.061616997868383e-15,-50L2.7554552980815448e-15,-45 A45,45 0 1 1 2.8676232990100596e-13,-45 L3.1862481100111774e-13,-50"
-    style={
-      Object {
-        "fill": "lime",
-      }
-    }
+  <Range
+    angleOffset={0}
+    angleRange={180}
+    arcWidth={5}
+    center={0}
+    color="lime"
+    percentageFrom={0}
+    percentageTo={50}
+    radius={50}
   />
 </g>
 `;

@@ -12,8 +12,8 @@ const example = `
   max={100}
   onChange={value => console.log(value)}
   onInteractiveChange={value => console.log("interactive", value)}
-  onMouseDown={e => console.log("mouse down")}
-  onMouseUp={e => console.log("mouse up")}
+  onStart={e => console.log("mouse down")}
+  onEnd={e => console.log("mouse up")}
   tracking={false}
 >
 <circle r="40" cx="50" cy="50" fill="#FC5A96" />
@@ -41,8 +41,8 @@ export default () => (
         max={100}
         onChange={value => console.log(value)}
         onInteractiveChange={value => console.log("interactive", value)}
-        onMouseDown={e => console.log("mouse down")}
-        onMouseUp={e => console.log("mouse up")}
+        onStart={e => console.log("mouse down")}
+        onEnd={e => console.log("mouse up")}
         tracking={false}
       >
         <circle r="40" cx="50" cy="50" fill="#fc5a96" />

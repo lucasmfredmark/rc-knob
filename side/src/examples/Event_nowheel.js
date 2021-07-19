@@ -9,9 +9,6 @@ const example = `
   angleRange={280}
   min={0}
   max={100}
-  onChange={value => console.log(value)}
-  onMouseDown={e => console.log("mouse down")}
-  onMouseUp={e => console.log("mouse up")}
   useMouseWheel={false}
 >
 <circle r="40" cx="50" cy="50" fill="#FC5A96" />

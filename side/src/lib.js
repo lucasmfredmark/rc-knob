@@ -609,7 +609,7 @@ var useUpdate = (function (_ref) {
       dispatch: dispatch,
       useMouseWheel: useMouseWheel,
       interactiveHook: interactiveHook
-    }), [useMouseWheel, interactiveHook]);
+    }), [useMouseWheel]);
   }
 
   return {

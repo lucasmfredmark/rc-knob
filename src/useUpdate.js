@@ -143,7 +143,7 @@ export default ({
         onStart,
         onEnd,
     }
-    const [{ percentage, value, angle, isActive }, dispatch] = useReducer(
+    const [{ percentage, value }, dispatch] = useReducer(
         reducer(callbacks),
         {
             isActive: false,

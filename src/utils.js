@@ -35,7 +35,7 @@ export const calculatePositionFromMouseAngle = ({
         const newPercentage = previousPercentage + validDeltaAngle / angleRange
         if (!multiRotation && (newPercentage < 0 || newPercentage > 1)) {
             const clampedPercentage = (newPercentage < 0) ? 0 : 1
-            const theoricalMouseAngle = (newPercentage < 0) ? angleOffset : angleOffset + angleRange
+            const theoricalMouseAngle = (newPercentage < 0) ? angleOffset : (angleOffset + angleRange + 720) % 360
             return {
                 updated: true,
                 mouseAngle: theoricalMouseAngle,

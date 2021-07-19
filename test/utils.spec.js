@@ -1,4 +1,4 @@
-import { clamp, findClosest, snapPercentage, calculatePositionFromMouseAngle, calculatePercentageFromMouseAngle } from '../src/utils'
+import { clamp, snapPosition, snapPercentage, calculatePositionFromMouseAngle, calculatePercentageFromMouseAngle } from '../src/utils'
 
 describe('utils', () => {
     it('clamp value', () => {
@@ -129,6 +129,22 @@ describe('utils', () => {
             it(comment, () => {
                 const result = calculatePercentageFromMouseAngle(testParams)
                 expect(result).toBeCloseTo(expected)
+            })
+        })
+    })
+
+    describe('snapPosition', () => {
+        const state = { angleOffset: 0, angleRange: 360 }
+        const params = [
+            ['normal', { position: { updated: true, percentage: 0.56 }, state, steps: 4 }, 180],
+            ['second turn', { position: { updated: true, percentage: 1.56 }, state, steps: 4 }, 180],
+            ['negative turn', { position: { updated: true, percentage: -1.56 }, state, steps: 4 }, 180],
+        ]
+        params.forEach(param => {
+            const [comment, {position, state, steps}, expected] = param
+            it(comment, () => {
+                const result = snapPosition(position, state, steps)
+                expect(result.mouseAngle).toBeCloseTo(expected)
             })
         })
     })

@@ -80,7 +80,7 @@ It is accessible by keyboard using `tab`.
 - `interactiveHook`
 
     Callback to tune the behaviour of the knob during the mouse interaction.
-    See the [`details on interactiveHook`](#interactiveHook) bellow.
+    See the [details on `interactiveHook`](#interactiveHook) bellow.
 
 - `max`
 

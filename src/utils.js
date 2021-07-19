@@ -91,7 +91,7 @@ export const snapPosition = (position, state, steps) => {
     return {
         ...position,
         percentage,
-        mouseAngle
+        mouseAngle: mouseAngle < 0 ? mouseAngle + 360 : mouseAngle
     }
 }
 

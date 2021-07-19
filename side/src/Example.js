@@ -32,3 +32,17 @@ export default ({ example, knob, title, options, widget }) => (
         </CodeBlock>
     </Cell>
 )
+
+export function Example({ example, title, children }) {
+    return (
+        <Cell>
+            <H3>{title}</H3>
+            {children}
+            <CodeBlock>
+                <SyntaxHighlighter language="jsx" style={theme}>
+                    {example}
+                </SyntaxHighlighter>
+            </CodeBlock>
+        </Cell>
+    )
+}

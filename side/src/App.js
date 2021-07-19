@@ -5,6 +5,7 @@ import PointerExample from './examples/Pointer'
 import ScaleExample from './examples/Scale'
 import ArcExample from './examples/Arc'
 import ArcPointerExample from './examples/Arc_Pointer'
+import ArcPointerAnticlockwiseExample from './examples/Arc_Pointer_anticlockwise'
 import ScalePointerExample from './examples/Scale_Pointer'
 import ValueExample from './examples/Value'
 import ArcPointerValueExample from './examples/Arc_Pointer_Value'
@@ -60,6 +61,7 @@ export default () => {
                 <ScalePointerExample />
                 <ArcPointerValueExample />
                 <ScaleScale />
+                <ArcPointerAnticlockwiseExample />
             </Grid>
             <H2>
                 <span>Custom Elements</span>

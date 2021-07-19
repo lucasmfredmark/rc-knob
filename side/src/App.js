@@ -18,6 +18,7 @@ import EventMouse from "./examples/Event_mouse";
 import EventReadOnly from "./examples/Event_readOnly";
 import EventNoWheel from "./examples/Event_nowheel";
 import EventTrackingFalse from "./examples/Event_trackingFalse";
+import EventInteractiveHook from "./examples/Event_interactiveHook";
 import AsyncMotor from "./examples/Async_motor";
 import AsyncMotorMultiTurn from "./examples/Async_multiTurn";
 
@@ -79,6 +80,7 @@ export default () => {
                 <EventReadOnly />
                 <EventNoWheel />
                 <EventTrackingFalse />
+                <EventInteractiveHook />
             </Grid>
             <H2>
                 <span>Styles</span>

@@ -163,12 +163,10 @@ export default ({
         }
     )
 
-    if (!readOnly) {
-        useEffect(handleEventListener(
-            { container, dispatch, useMouseWheel, interactiveHook }),
-            [useMouseWheel]
-        )
-    }
+    useEffect(handleEventListener(
+        { container, dispatch, readOnly, useMouseWheel, interactiveHook }),
+        [useMouseWheel, readOnly]
+    )
 
     return {
         svg,

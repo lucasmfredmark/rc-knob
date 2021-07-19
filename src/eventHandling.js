@@ -57,7 +57,11 @@ const getMousePosition = (elem, e) => {
     }
 }
 
-export const handleEventListener = ({ container, dispatch, useMouseWheel, interactiveHook }) => () => {
+export const handleEventListener = ({ container, dispatch, readOnly, useMouseWheel, interactiveHook }) => () => {
+    if (readOnly) {
+        return
+    }
+
     const div = container.current
     const events = Object()
 

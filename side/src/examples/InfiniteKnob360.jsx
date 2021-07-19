@@ -18,6 +18,7 @@ export default function InfiniteKnob360({
   disabled = false,
   readOnly = false,
   origin = "up",
+  direction = "clockwise",
   onChange = () => { },
 }) {
   const [editedValue, setEditedValue] = React.useState(null)
@@ -56,12 +57,14 @@ export default function InfiniteKnob360({
     return {}
   }
 
+  const angleRange = (direction === "clockwise") ? 360 : -360
+
   return (
     <Knob
       size={size}
       value={value}
       angleOffset={delta}
-      angleRange={360}
+      angleRange={angleRange}
       min={0}
       max={360}
       multiRotation={true}

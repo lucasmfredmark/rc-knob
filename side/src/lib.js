@@ -302,9 +302,14 @@ var getMousePosition = function getMousePosition(elem, e) {
 var handleEventListener = function handleEventListener(_ref) {
   var container = _ref.container,
       dispatch = _ref.dispatch,
+      readOnly = _ref.readOnly,
       useMouseWheel = _ref.useMouseWheel,
       interactiveHook = _ref.interactiveHook;
   return function () {
+    if (readOnly) {
+      return;
+    }
+
     var div = container.current;
     var events = Object();
 
@@ -603,15 +608,13 @@ var useUpdate = (function (_ref) {
       value = _useReducer2$.value,
       dispatch = _useReducer2[1];
 
-  if (!readOnly) {
-    React.useEffect(handleEventListener({
-      container: container,
-      dispatch: dispatch,
-      useMouseWheel: useMouseWheel,
-      interactiveHook: interactiveHook
-    }), [useMouseWheel]);
-  }
-
+  React.useEffect(handleEventListener({
+    container: container,
+    dispatch: dispatch,
+    readOnly: readOnly,
+    useMouseWheel: useMouseWheel,
+    interactiveHook: interactiveHook
+  }), [useMouseWheel, readOnly]);
   return {
     svg: svg,
     container: container,

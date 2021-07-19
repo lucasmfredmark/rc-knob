@@ -1,4 +1,4 @@
-import { clamp, findClosest, snapPercentage, calculatePositionFromMouseAngle } from '../src/utils'
+import { clamp, findClosest, snapPercentage, calculatePositionFromMouseAngle, calculatePercentageFromMouseAngle } from '../src/utils'
 
 describe('utils', () => {
     it('clamp value', () => {
@@ -111,4 +111,26 @@ describe('utils', () => {
             expect(result).toEqual(-0.5)
         })
     })
+
+    describe('calculatePercentageFromMouseAngle', () => {
+        const params = [
+            ['easy', { mouseAngle: 180, angleOffset: 0, angleRange: 360 }, 0.5],
+            ['clockwise center', { mouseAngle: 0, angleOffset: 220, angleRange: 280 }, 0.5],
+            ['clockwise too small', { mouseAngle: 210, angleOffset: 220, angleRange: 280 }, 0],
+            ['clockwise too big', { mouseAngle: 150, angleOffset: 220, angleRange: 280 }, 1],
+            ['anticlockwise center', { mouseAngle: 0, angleOffset: -220, angleRange: -280 }, 0.5],
+            ['anticlockwise too small', { mouseAngle: 150, angleOffset: -220, angleRange: -280 }, 0],
+            ['anticlockwise too big', { mouseAngle: 210, angleOffset: -220, angleRange: -280 }, 1],
+            ['clockwise value', { mouseAngle: 10, angleOffset: 0, angleRange: 100 }, 0.1],
+            ['anticlockwise value', { mouseAngle: 10, angleOffset: 100, angleRange: -100 }, 0.9],
+        ]
+        params.forEach(param => {
+            const [comment, testParams, expected] = param
+            it(comment, () => {
+                const result = calculatePercentageFromMouseAngle(testParams)
+                expect(result).toBeCloseTo(expected)
+            })
+        })
+    })
+
 })

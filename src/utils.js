@@ -5,15 +5,9 @@ export const calculatePercentageFromMouseAngle = ({
     angleOffset,
     angleRange,
 }) => {
-    let angle = mouseAngle - angleOffset
-    if (angle < 0) {
-        angle += 360
-    }
-    if (angle <= angleRange) {
-        return clamp(0, 1, angle / angleRange)
-    } else {
-        return +(angle - angleRange < (360 - angleRange) / 2)
-    }
+    const rangle = (mouseAngle - (angleOffset + angleRange * 0.5) + 900) % 360 - 180
+    const percentage = 0.5 + rangle / angleRange
+    return clamp(0, 1, percentage)
 }
 
 export const calculatePositionFromMouseAngle = ({

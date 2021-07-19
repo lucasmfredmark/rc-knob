@@ -6,14 +6,6 @@ const pointOnCircle = (center, radius, angle) => ({
 })
 const degTorad = deg => (Math.PI * deg) / 180
 
-function ordered(v1, v2) {
-    if (v1 <= v2) {
-        return [v1, v2]
-    } else {
-        return [v2, v1]
-    }
-}
-
 const calcPath = ({
     percentageFrom,
     percentageTo,
@@ -23,24 +15,24 @@ const calcPath = ({
     radius: outerRadius,
     center,
 }) => {
-    const [percentageMin, percentageMax] = ordered(percentageFrom, percentageTo)
-    const angle = angleRange * (percentageMax - percentageMin)
-    const startAngle = angleOffset - 90 + angleRange * percentageMin
+    const angle = angleRange * (percentageTo - percentageFrom)
+    const angleFrom = angleOffset - 90 + angleRange * percentageFrom
     const innerRadius = outerRadius - arcWidth
-    const startAngleRad = degTorad(startAngle)
-    const endAngleRad = degTorad(startAngle + angle)
-    const largeArcFlag = angle < 180 ? 0 : 1
+    const angleFromRad = degTorad(angleFrom)
+    const angleToRad = degTorad(angleFrom + angle)
+    const largeArcFlag = Math.abs(angle) < 180 ? 0 : 1
+    const direction = angle >= 0 ? 1 : 0
 
-    const p1 = pointOnCircle(center, outerRadius, endAngleRad)
-    const p2 = pointOnCircle(center, outerRadius, startAngleRad)
-    const p3 = pointOnCircle(center, innerRadius, startAngleRad)
-    const p4 = pointOnCircle(center, innerRadius, endAngleRad)
+    const p1 = pointOnCircle(center, outerRadius, angleFromRad)
+    const p2 = pointOnCircle(center, outerRadius, angleToRad)
+    const p3 = pointOnCircle(center, innerRadius, angleToRad)
+    const p4 = pointOnCircle(center, innerRadius, angleFromRad)
 
     return `M${p1.x},${
         p1.y
-    } A${outerRadius},${outerRadius} 0 ${largeArcFlag} 0 ${p2.x},${p2.y}L${
+    } A${outerRadius},${outerRadius} 0 ${largeArcFlag} ${direction} ${p2.x},${p2.y}L${
         p3.x
-    },${p3.y} A${innerRadius},${innerRadius} 0 ${largeArcFlag} 1 ${p4.x},${
+    },${p3.y} A${innerRadius},${innerRadius} 0 ${largeArcFlag} ${1-direction} ${p4.x},${
         p4.y
     } L${p1.x},${p1.y}`
 }
@@ -71,6 +63,7 @@ export const Range = ({
         pfrom = 0
         pto = 0.9999
     }
+
     const d = calcPath({percentageFrom:pfrom, percentageTo:pto, ...props})
     return (<g>
         <path d={d} style={{ fill: color }} />

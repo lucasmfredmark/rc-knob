@@ -77,6 +77,11 @@ It is accessible by keyboard using `tab`.
 
     Will be added to the knob main element.
 
+- `interactiveHook`
+
+    Callback to tune the behaviour of the knob during the mouse interaction.
+    See the [`details on interactiveHook`](#interactiveHook) bellow.
+
 - `max`
 
     Max value of the knob.
@@ -153,6 +158,41 @@ It is accessible by keyboard using `tab`.
     If `true`, the knob can be turned many times.
     `min`/`max` are not taken into acount anymore to limit the value.
     Default is `false`.
+
+#### interactiveHook
+
+This hook allow to configure the knob to behave in different way depending on
+the location of the mouse during the interaction.
+
+A dedicated event is passed to this callback during the mouse interaction
+containing:
+
+- `mouseRadius`, the radius location of the mouse into the knob
+- `mouseAngle`, the angle (positive degree) location of the mouse into the knob (relative to `angleOffset`)
+- `mouseX`, the X location on the mouse relative to the center of the knob
+- `mouseY`, the Y location on the mouse relative to the center of the knob
+- `ctrlKey`, inherited from `MouseEvent`
+- `altKey`, inherited from `MouseEvent`
+- `metaKey`, inherited from `MouseEvent`
+- `shiftKey`, inherited from `MouseEvent`
+
+The callback have to return a specific dictionary, which can contain:
+
+- `readOnly`, if `true`, the mouse event is inhibited
+- `steps`, number of intervales to snap on
+
+Here is an example of such callback:
+
+```
+function interactiveHook(e) {
+    if (e.mouseRadius < 20) {
+        // inhibite the center of the knob
+        return {readOnly: true}
+    }
+    // default
+    return {}
+}
+```
 
 ### `<Arc/>`
 

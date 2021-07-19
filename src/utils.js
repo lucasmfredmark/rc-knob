@@ -1,18 +1,5 @@
 export const clamp = (min, max, value) => Math.max(min, Math.min(max, value))
 
-export const calculateMouseAngle = ({
-    centerX,
-    centerY,
-    clientX,
-    clientY,
-}) => {
-    const x = clientX - centerX
-    const y = clientY - centerY
-    const degree = (Math.atan2(y, x) * 180) / Math.PI + 90
-    const angle = degree < 0 ? degree + 360 : degree
-    return angle
-}
-
 export const calculatePercentageFromMouseAngle = ({
     mouseAngle,
     angleOffset,
@@ -95,17 +82,26 @@ export const calculatePositionFromMouseAngle = ({
     }
 }
 
-export const findClosest = (values, value) => {
-    let result
-    let lastDelta = Infinity
-    values.forEach(item => {
-        const delta = Math.abs(value - item)
-        if (delta < lastDelta) {
-            result = item
-            lastDelta = delta
-        }
-    })
-    return result
+export const snapPosition = (position, state, steps) => {
+    if (!position.updated || !steps) {
+        return position
+    }
+    const percentage = snapPercentage(position.percentage, steps)
+    const mouseAngle = (state.angleOffset + state.angleRange * percentage) % 360
+    return {
+        ...position,
+        percentage,
+        mouseAngle
+    }
+}
+
+export const snapPercentage = (percentage, nbIntervals) => {
+    if (percentage === 0) return 0
+    const sign = Math.sign(percentage)
+	const p = Math.abs(percentage)
+    const stepSize = 1 / nbIntervals
+    const extra = (p + stepSize * 0.5) % stepSize
+    return sign * (p - stepSize * 0.5) + sign * (stepSize - extra)
 }
 
 export const getValueFromPercentage = ({ min, max, percentage }) =>
@@ -113,11 +109,3 @@ export const getValueFromPercentage = ({ min, max, percentage }) =>
 
 export const getPercentageFromValue = ({ min, max, value }) =>
     (value - min) / (max - min)
-
-export const getClientCenter = ({ container, size }) => {
-    const rect = container.current.getBoundingClientRect();
-    return {
-        centerX: rect.x + size / 2,
-        centerY: rect.y + size / 2,
-    }
-}

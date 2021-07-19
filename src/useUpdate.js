@@ -1,12 +1,10 @@
 import { useReducer, useEffect, useRef } from 'react'
 import {
     calculatePositionFromMouseAngle,
-    calculateMouseAngle,
-    findClosest,
-    getClientCenter,
     getValueFromPercentage,
     clamp,
     getPercentageFromValue,
+    snapPosition,
 } from './utils'
 import {
     onKeyDown,
@@ -14,16 +12,15 @@ import {
 } from './eventHandling'
 
 const reduceOnStart = (state, action, callbacks) => {
-    const center = getClientCenter(state)
-    const mouseAngle = calculateMouseAngle({...center, ...action})
     const position = calculatePositionFromMouseAngle({
         previousMouseAngle: null,
         previousPercentage: null,
         ...state,
         ...action,
-        mouseAngle,
     })
-    const value = getValueFromPercentage({ ...state, ...position })
+    const steps = action.steps || state.steps
+    const position2 = snapPosition(position, state, steps)
+    const value = getValueFromPercentage({ ...state, ...position2 })
     callbacks.onStart()
     callbacks.onInteractiveChange(value)
     if (state.tracking) {
@@ -32,8 +29,7 @@ const reduceOnStart = (state, action, callbacks) => {
     return {
         ...state,
         isActive: true,
-        ...position,
-        ...center,
+        ...position2,
         startPercentage: state.percentage,
         startValue: state.value,
         value
@@ -42,22 +38,22 @@ const reduceOnStart = (state, action, callbacks) => {
 
 
 const reduceOnMove = (state, action, callbacks) => {
-    const mouseAngle = calculateMouseAngle({...state, ...action})
     const position = calculatePositionFromMouseAngle({
         previousMouseAngle: state.mouseAngle,
         previousPercentage: state.percentage,
         ...state,
         ...action,
-        mouseAngle,
     })
-    const value = getValueFromPercentage({ ...state, ...position })
+    const steps = action.steps || state.steps
+    const position2 = snapPosition(position, state, steps)
+    const value = getValueFromPercentage({ ...state, ...position2 })
     callbacks.onInteractiveChange(value)
     if (state.tracking) {
         callbacks.onChange(value)
     }
     return {
         ...state,
-        ...position,
+        ...position2,
         value,
     }
 }
@@ -132,6 +128,7 @@ export default ({
     steps,
     onChange,
     onInteractiveChange,
+    interactiveHook,
     onStart,
     onEnd,
     readOnly,
@@ -140,8 +137,14 @@ export default ({
 }) => {
     const svg = useRef()
     const container = useRef()
-    const [{ percentage, value, angle, isActive }, dispatch] = useReducer(
-        reducer({ onChange, onInteractiveChange, onStart, onEnd }),
+    const callbacks = {
+	    onChange,
+        onInteractiveChange,
+        onStart,
+        onEnd,
+    }
+    const [{ percentage, value }, dispatch] = useReducer(
+        reducer(callbacks),
         {
             isActive: false,
             min,
@@ -156,21 +159,22 @@ export default ({
             tracking,
             container,
             size,
+            steps,
         }
     )
 
     if (!readOnly) {
         useEffect(handleEventListener(
-            { container, dispatch, useMouseWheel }),
-            [useMouseWheel]
+            { container, dispatch, useMouseWheel, interactiveHook }),
+            [useMouseWheel, interactiveHook]
         )
     }
 
     return {
         svg,
         container,
-        percentage: steps ? findClosest(steps, percentage) : percentage,
-        value,
+        percentage: percentage,
+        value: value,
         onKeyDown: onKeyDown(dispatch),
     }
 }

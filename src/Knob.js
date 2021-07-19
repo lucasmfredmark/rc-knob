@@ -7,11 +7,6 @@ import { Value } from './Value'
 import { Range } from './Range'
 import { Spiral } from './Spiral'
 
-const stepsToSnapTo = (steps, snap) =>
-    steps && snap
-        ? Array.from({ length: steps + 1 }, (_, i) => (1 / steps) * i)
-        : undefined
-
 const isInternalComponent = ({ type }) =>
     type === Arc || type === Pointer || type === Scale || type === Value || type === Range || type === Spiral
 
@@ -25,6 +20,7 @@ export const Knob = ({
     size,
     onChange = () => {},
     onInteractiveChange = () => {},
+    interactiveHook = undefined,
     onStart = () => {},
     onEnd = () => {},
     children,
@@ -51,9 +47,10 @@ export const Knob = ({
         angleOffset,
         angleRange,
         size,
-        steps: stepsToSnapTo(steps, snap),
+        steps: snap ? steps : undefined,
         onChange,
         onInteractiveChange,
+        interactiveHook,
         useMouseWheel,
         readOnly,
         tracking,

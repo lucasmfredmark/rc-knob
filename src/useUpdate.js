@@ -166,7 +166,7 @@ export default ({
     if (!readOnly) {
         useEffect(handleEventListener(
             { container, dispatch, useMouseWheel, interactiveHook }),
-            [useMouseWheel, interactiveHook]
+            [useMouseWheel]
         )
     }
 

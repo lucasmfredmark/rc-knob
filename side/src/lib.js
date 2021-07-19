@@ -118,21 +118,10 @@ function _nonIterableRest() {
 var clamp = function clamp(min, max, value) {
   return Math.max(min, Math.min(max, value));
 };
-var calculateMouseAngle = function calculateMouseAngle(_ref) {
-  var centerX = _ref.centerX,
-      centerY = _ref.centerY,
-      clientX = _ref.clientX,
-      clientY = _ref.clientY;
-  var x = clientX - centerX;
-  var y = clientY - centerY;
-  var degree = Math.atan2(y, x) * 180 / Math.PI + 90;
-  var angle = degree < 0 ? degree + 360 : degree;
-  return angle;
-};
-var calculatePercentageFromMouseAngle = function calculatePercentageFromMouseAngle(_ref2) {
-  var mouseAngle = _ref2.mouseAngle,
-      angleOffset = _ref2.angleOffset,
-      angleRange = _ref2.angleRange;
+var calculatePercentageFromMouseAngle = function calculatePercentageFromMouseAngle(_ref) {
+  var mouseAngle = _ref.mouseAngle,
+      angleOffset = _ref.angleOffset,
+      angleRange = _ref.angleRange;
   var angle = mouseAngle - angleOffset;
 
   if (angle < 0) {
@@ -145,14 +134,14 @@ var calculatePercentageFromMouseAngle = function calculatePercentageFromMouseAng
     return +(angle - angleRange < (360 - angleRange) / 2);
   }
 };
-var calculatePositionFromMouseAngle = function calculatePositionFromMouseAngle(_ref3) {
-  var mouseAngle = _ref3.mouseAngle,
-      multiRotation = _ref3.multiRotation,
-      angleOffset = _ref3.angleOffset,
-      angleRange = _ref3.angleRange,
-      percentage = _ref3.percentage,
-      previousPercentage = _ref3.previousPercentage,
-      previousMouseAngle = _ref3.previousMouseAngle;
+var calculatePositionFromMouseAngle = function calculatePositionFromMouseAngle(_ref2) {
+  var mouseAngle = _ref2.mouseAngle,
+      multiRotation = _ref2.multiRotation,
+      angleOffset = _ref2.angleOffset,
+      angleRange = _ref2.angleRange,
+      percentage = _ref2.percentage,
+      previousPercentage = _ref2.previousPercentage,
+      previousMouseAngle = _ref2.previousMouseAngle;
 
   if (previousMouseAngle !== null) {
     // normalize and cancel the interaction if the delta angle is too big
@@ -214,39 +203,37 @@ var calculatePositionFromMouseAngle = function calculatePositionFromMouseAngle(_
     }
   }
 };
-var findClosest = function findClosest(values, value) {
-  var result;
-  var lastDelta = Infinity;
-  values.forEach(function (item) {
-    var delta = Math.abs(value - item);
+var snapPosition = function snapPosition(position, state, steps) {
+  if (!position.updated || !steps) {
+    return position;
+  }
 
-    if (delta < lastDelta) {
-      result = item;
-      lastDelta = delta;
-    }
+  var percentage = snapPercentage(position.percentage, steps);
+  var mouseAngle = (state.angleOffset + state.angleRange * percentage) % 360;
+  return _objectSpread({}, position, {
+    percentage: percentage,
+    mouseAngle: mouseAngle
   });
-  return result;
 };
-var getValueFromPercentage = function getValueFromPercentage(_ref4) {
-  var min = _ref4.min,
-      max = _ref4.max,
-      percentage = _ref4.percentage;
+var snapPercentage = function snapPercentage(percentage, nbIntervals) {
+  if (percentage === 0) return 0;
+  var sign = Math.sign(percentage);
+  var p = Math.abs(percentage);
+  var stepSize = 1 / nbIntervals;
+  var extra = (p + stepSize * 0.5) % stepSize;
+  return sign * (p - stepSize * 0.5) + sign * (stepSize - extra);
+};
+var getValueFromPercentage = function getValueFromPercentage(_ref3) {
+  var min = _ref3.min,
+      max = _ref3.max,
+      percentage = _ref3.percentage;
   return min + (max - min) * percentage;
 };
-var getPercentageFromValue = function getPercentageFromValue(_ref5) {
-  var min = _ref5.min,
-      max = _ref5.max,
-      value = _ref5.value;
+var getPercentageFromValue = function getPercentageFromValue(_ref4) {
+  var min = _ref4.min,
+      max = _ref4.max,
+      value = _ref4.value;
   return (value - min) / (max - min);
-};
-var getClientCenter = function getClientCenter(_ref6) {
-  var container = _ref6.container,
-      size = _ref6.size;
-  var rect = container.current.getBoundingClientRect();
-  return {
-    centerX: rect.x + size / 2,
-    centerY: rect.y + size / 2
-  };
 };
 
 var DIRECTIONS = {
@@ -280,16 +267,73 @@ var onScroll = function onScroll(dispatch) {
     });
   };
 };
+
+var getClientCenter = function getClientCenter(elem) {
+  var rect = elem.getBoundingClientRect();
+  return {
+    centerX: rect.x + elem.clientWidth / 2,
+    centerY: rect.y + elem.clientHeight / 2
+  };
+};
+/**
+ * Compute mouse position relative to the elem center
+ * and a polar position with angle in degree and radius
+ */
+
+
+var getMousePosition = function getMousePosition(elem, e) {
+  var _getClientCenter = getClientCenter(elem),
+      centerX = _getClientCenter.centerX,
+      centerY = _getClientCenter.centerY;
+
+  var mouseX = e.clientX - centerX;
+  var mouseY = e.clientY - centerY;
+  var degree = Math.atan2(mouseY, mouseX) * 180 / Math.PI + 90;
+  var mouseAngle = degree < 0 ? degree + 360 : degree;
+  var mouseRadius = Math.sqrt(mouseX * mouseX + mouseY * mouseY);
+  return {
+    mouseX: mouseX,
+    mouseY: mouseY,
+    mouseRadius: mouseRadius,
+    mouseAngle: mouseAngle
+  };
+};
+
 var handleEventListener = function handleEventListener(_ref) {
   var container = _ref.container,
       dispatch = _ref.dispatch,
-      useMouseWheel = _ref.useMouseWheel;
+      useMouseWheel = _ref.useMouseWheel,
+      interactiveHook = _ref.interactiveHook;
   return function () {
     var div = container.current;
     var events = Object();
 
+    var getInteractiveConfig = function getInteractiveConfig(mousePosition, e) {
+      var userConfig = {};
+
+      if (interactiveHook) {
+        var event = _objectSpread({
+          ctrlKey: e.ctrlKey,
+          altKey: e.altKey,
+          metaKey: e.metaKey,
+          shiftKey: e.shiftKey
+        }, mousePosition);
+
+        userConfig = interactiveHook(event);
+      }
+
+      return userConfig;
+    };
+
     var onStart = function onStart(e) {
-      if (e.pointerType == "mouse" && e.button != 0) {
+      if (e.pointerType === "mouse" && e.button !== 0) {
+        return;
+      }
+
+      var mousePosition = getMousePosition(div, e);
+      var userConfig = getInteractiveConfig(mousePosition, e);
+
+      if (userConfig.readOnly) {
         return;
       }
 
@@ -311,11 +355,9 @@ var handleEventListener = function handleEventListener(_ref) {
 
       div.addEventListener('contextmenu', onContextMenu);
       events.capturedContextMenu = true;
-      dispatch({
-        clientX: e.clientX,
-        clientY: e.clientY,
+      dispatch(_objectSpread({
         type: 'START'
-      });
+      }, mousePosition, userConfig));
     };
 
     var clearCapture = function clearCapture() {
@@ -342,11 +384,16 @@ var handleEventListener = function handleEventListener(_ref) {
     var onMove = function onMove(e) {
       e.preventDefault();
       e.stopPropagation();
-      dispatch({
-        clientX: e.clientX,
-        clientY: e.clientY,
+      var mousePosition = getMousePosition(div, e);
+      var userConfig = getInteractiveConfig(mousePosition, e);
+
+      if (userConfig.readOnly) {
+        return;
+      }
+
+      dispatch(_objectSpread({
         type: 'MOVE'
-      });
+      }, mousePosition, userConfig));
     };
 
     var onStop = function onStop() {
@@ -393,15 +440,13 @@ var handleEventListener = function handleEventListener(_ref) {
 };
 
 var reduceOnStart = function reduceOnStart(state, action, callbacks) {
-  var center = getClientCenter(state);
-  var mouseAngle = calculateMouseAngle(_objectSpread({}, center, action));
   var position = calculatePositionFromMouseAngle(_objectSpread({
     previousMouseAngle: null,
     previousPercentage: null
-  }, state, action, {
-    mouseAngle: mouseAngle
-  }));
-  var value = getValueFromPercentage(_objectSpread({}, state, position));
+  }, state, action));
+  var steps = action.steps || state.steps;
+  var position2 = snapPosition(position, state, steps);
+  var value = getValueFromPercentage(_objectSpread({}, state, position2));
   callbacks.onStart();
   callbacks.onInteractiveChange(value);
 
@@ -411,28 +456,28 @@ var reduceOnStart = function reduceOnStart(state, action, callbacks) {
 
   return _objectSpread({}, state, {
     isActive: true
-  }, position, center, {
+  }, position2, {
     startPercentage: state.percentage,
-    startValue: state.value
+    startValue: state.value,
+    value: value
   });
 };
 
 var reduceOnMove = function reduceOnMove(state, action, callbacks) {
-  var mouseAngle = calculateMouseAngle(_objectSpread({}, state, action));
   var position = calculatePositionFromMouseAngle(_objectSpread({
     previousMouseAngle: state.mouseAngle,
     previousPercentage: state.percentage
-  }, state, action, {
-    mouseAngle: mouseAngle
-  }));
-  var value = getValueFromPercentage(_objectSpread({}, state, position));
+  }, state, action));
+  var steps = action.steps || state.steps;
+  var position2 = snapPosition(position, state, steps);
+  var value = getValueFromPercentage(_objectSpread({}, state, position2));
   callbacks.onInteractiveChange(value);
 
   if (state.tracking) {
     callbacks.onChange(value);
   }
 
-  return _objectSpread({}, state, position, {
+  return _objectSpread({}, state, position2, {
     value: value
   });
 };
@@ -521,6 +566,7 @@ var useUpdate = (function (_ref) {
       steps = _ref.steps,
       onChange = _ref.onChange,
       onInteractiveChange = _ref.onInteractiveChange,
+      interactiveHook = _ref.interactiveHook,
       onStart = _ref.onStart,
       onEnd = _ref.onEnd,
       readOnly = _ref.readOnly,
@@ -528,13 +574,14 @@ var useUpdate = (function (_ref) {
       useMouseWheel = _ref.useMouseWheel;
   var svg = React.useRef();
   var container = React.useRef();
-
-  var _useReducer = React.useReducer(reducer({
+  var callbacks = {
     onChange: onChange,
     onInteractiveChange: onInteractiveChange,
     onStart: onStart,
     onEnd: onEnd
-  }), {
+  };
+
+  var _useReducer = React.useReducer(reducer(callbacks), {
     isActive: false,
     min: min,
     max: max,
@@ -547,28 +594,28 @@ var useUpdate = (function (_ref) {
     svg: svg,
     tracking: tracking,
     container: container,
-    size: size
+    size: size,
+    steps: steps
   }),
       _useReducer2 = _slicedToArray(_useReducer, 2),
       _useReducer2$ = _useReducer2[0],
       percentage = _useReducer2$.percentage,
       value = _useReducer2$.value,
-      angle = _useReducer2$.angle,
-      isActive = _useReducer2$.isActive,
       dispatch = _useReducer2[1];
 
   if (!readOnly) {
     React.useEffect(handleEventListener({
       container: container,
       dispatch: dispatch,
-      useMouseWheel: useMouseWheel
-    }), [useMouseWheel]);
+      useMouseWheel: useMouseWheel,
+      interactiveHook: interactiveHook
+    }), [useMouseWheel, interactiveHook]);
   }
 
   return {
     svg: svg,
     container: container,
-    percentage: steps ? findClosest(steps, percentage) : percentage,
+    percentage: percentage,
     value: value,
     onKeyDown: onKeyDown(dispatch)
   };
@@ -796,7 +843,18 @@ var Value = function Value(_ref) {
       className = _ref.className,
       _ref$marginBottom = _ref.marginBottom,
       marginBottom = _ref$marginBottom === void 0 ? 0 : _ref$marginBottom;
-  return value == null ? null : React__default.createElement("text", {
+
+  if (value === null || value === undefined) {
+    return null;
+  }
+
+  var label = value.toFixed(decimalPlace); // make sure no negative zero is displayed
+
+  if (label.startsWith("-") && label == 0) {
+    label = label.slice(1);
+  }
+
+  return React__default.createElement("text", {
     style: {
       userSelect: 'none'
     },
@@ -804,7 +862,7 @@ var Value = function Value(_ref) {
     textAnchor: "middle",
     className: className,
     y: size - marginBottom
-  }, value.toFixed(decimalPlace));
+  }, label);
 };
 
 var pointOnCircle$1 = function pointOnCircle(center, radius, angle) {
@@ -880,8 +938,9 @@ var Range = function Range(_ref2) {
   } // Clamp
 
 
-  if (Math.abs(pto - pfrom) > 1) {
-    pto = pfrom + 1;
+  if (Math.abs(pto - pfrom) >= 1) {
+    pfrom = 0;
+    pto = 0.9999;
   }
 
   var d = calcPath$1(_objectSpread({
@@ -1011,14 +1070,6 @@ var Spiral = function Spiral(_ref2) {
   }));
 };
 
-var stepsToSnapTo = function stepsToSnapTo(steps, snap) {
-  return steps && snap ? Array.from({
-    length: steps + 1
-  }, function (_, i) {
-    return 1 / steps * i;
-  }) : undefined;
-};
-
 var isInternalComponent = function isInternalComponent(_ref) {
   var type = _ref.type;
   return type === Arc || type === Pointer || type === Scale || type === Value || type === Range || type === Spiral;
@@ -1039,6 +1090,8 @@ var Knob = function Knob(_ref2) {
       onChange = _ref2$onChange === void 0 ? function () {} : _ref2$onChange,
       _ref2$onInteractiveCh = _ref2.onInteractiveChange,
       onInteractiveChange = _ref2$onInteractiveCh === void 0 ? function () {} : _ref2$onInteractiveCh,
+      _ref2$interactiveHook = _ref2.interactiveHook,
+      interactiveHook = _ref2$interactiveHook === void 0 ? undefined : _ref2$interactiveHook,
       _ref2$onStart = _ref2.onStart,
       onStart = _ref2$onStart === void 0 ? function () {} : _ref2$onStart,
       _ref2$onEnd = _ref2.onEnd,
@@ -1065,9 +1118,10 @@ var Knob = function Knob(_ref2) {
     angleOffset: angleOffset,
     angleRange: angleRange,
     size: size,
-    steps: stepsToSnapTo(steps, snap),
+    steps: snap ? steps : undefined,
     onChange: onChange,
     onInteractiveChange: onInteractiveChange,
+    interactiveHook: interactiveHook,
     useMouseWheel: useMouseWheel,
     readOnly: readOnly,
     tracking: tracking,

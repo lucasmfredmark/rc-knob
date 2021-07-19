@@ -38,7 +38,6 @@ export default function InfiniteKnob360({
   const outerKnobRadius = outerTickRadius - tickMargin - tickSize;
   const pointerSize = 4;
   const pointerPosRadius = outerKnobRadius - pointerMargin - pointerSize / 2;
-  const delta = Origin[origin];
   const editable = !disabled && !readOnly;
   const shadowWidth = 5
   const localTarget = (editedValue !== null) ? editedValue : target
@@ -58,12 +57,13 @@ export default function InfiniteKnob360({
   }
 
   const angleRange = (direction === "clockwise") ? 360 : -360
+  const angleOffset = Origin[origin] + (direction === "clockwise") ? 0 : 360
 
   return (
     <Knob
       size={size}
       value={value}
-      angleOffset={delta}
+      angleOffset={angleOffset}
       angleRange={angleRange}
       min={0}
       max={360}
@@ -191,7 +191,6 @@ export default function InfiniteKnob360({
       />
       <Value
         value={editedValue !== null ? editedValue : value}
-        delta={delta}
         decimalPlace={1}
         marginBottom={size / 2}
         className="knob-text"
@@ -206,7 +205,16 @@ InfiniteKnob360.propTypes = {
   max: PropTypes.number.isRequired,
   value: PropTypes.number,
   target: PropTypes.number,
-  origin: PropTypes.string,
+  origin: PropTypes.oneOf([
+    "up",
+    "down",
+    "left",
+    "right",
+  ]),
+  direction: PropTypes.oneOf([
+    "clockwise",
+    "anticlockwise",
+  ]),
   disabled: PropTypes.bool,
   readOnly: PropTypes.bool,
   onChange: PropTypes.func,

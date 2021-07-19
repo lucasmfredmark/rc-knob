@@ -18,6 +18,10 @@ export default () => {
                     title="Disabled"
                     disabled={true}
                     />
+                <InfiniteExample
+                    title="Anti clockwise"
+                    direction="anticlockwise"
+                    />
             </Grid>
         </div>
     )

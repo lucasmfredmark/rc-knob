@@ -3,7 +3,7 @@ import {MockMotor} from './MockMotor'
 import InfiniteKnob360 from './InfiniteKnob360'
 import { H3, Cell } from '../styled'
 
-export default ({title, disabled=false}) => {
+export default ({title, disabled=false, direction="clockwise"}) => {
 
     const initialPosition = 45
     const [position, setPosition] = React.useState(initialPosition)
@@ -30,6 +30,7 @@ export default ({title, disabled=false}) => {
                 origin="up"
                 min={-9999}
                 max={9999}
+                direction={direction}
                 value={position}
                 onChange={onKnobChange}
                 />

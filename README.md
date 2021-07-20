@@ -51,11 +51,12 @@ It is accessible by keyboard using `tab`.
 - `angleOffset`
 
     Offset of the start angle in degree of the knob. 
-    The default is `0` which will be the top of the circle.
+    The default is `0` which will be the top of the circle, clockwise.
 
 - `angleRange`
 
-    Angle of the range in degree. 
+    Angle of the range in degree clockwise.
+    A negative value can be use to have an anticlockwise behaviour.
     By default its 360.
 
 - `ariaLabelledBy`
@@ -168,7 +169,9 @@ A dedicated event is passed to this callback during the mouse interaction
 containing:
 
 - `mouseRadius`, the radius location of the mouse into the knob
-- `mouseAngle`, the angle (positive degree) location of the mouse into the knob (relative to `angleOffset`)
+- `mouseAngle`, the angle (in degree, in range `0..360`) location of the mouse
+  into the knob (using the same referential as `angleOffset`: `0` on top,
+  clockwise)
 - `mouseX`, the X location on the mouse relative to the center of the knob
 - `mouseY`, the Y location on the mouse relative to the center of the knob
 - `ctrlKey`, inherited from `MouseEvent`

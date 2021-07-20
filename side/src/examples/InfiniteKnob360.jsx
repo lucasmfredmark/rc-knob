@@ -1,6 +1,6 @@
-import React from 'react';
-import { Knob, Value, Pointer, Scale, Range } from '../lib';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Knob, Value, Pointer, Scale, Range } from '../lib'
 
 const Origin = {
   up: 0,
@@ -9,12 +9,15 @@ const Origin = {
   left: 90
 }
 
-export default function InfiniteKnob360({
+/**
+ * Widget to handle cyclic angle value in degree displayed as an infinite knob
+ */
+ export default function InfiniteKnob360({
   size,
   value,
-  target=null,
-  min,
-  max,
+  target = null,
+  min, // TODO: to be implemented
+  max, // TODO: to be implemented
   disabled = false,
   readOnly = false,
   origin = "up",
@@ -31,14 +34,14 @@ export default function InfiniteKnob360({
     setEditedValue(angle)
   }
 
-  const tickSize = 8;
-  const tickMargin = 5;
-  const pointerMargin = 12;
-  const outerTickRadius = size * 0.5;
-  const outerKnobRadius = outerTickRadius - tickMargin - tickSize;
-  const pointerSize = 4;
-  const pointerPosRadius = outerKnobRadius - pointerMargin - pointerSize / 2;
-  const editable = !disabled && !readOnly;
+  const tickSize = 8
+  const tickMargin = 5
+  const pointerMargin = 12
+  const outerTickRadius = size * 0.5
+  const outerKnobRadius = outerTickRadius - tickMargin - tickSize
+  const pointerSize = 4
+  const pointerPosRadius = outerKnobRadius - pointerMargin - pointerSize / 2
+  const editable = !disabled && !readOnly
   const shadowWidth = 5
   const localTarget = (editedValue !== null) ? editedValue : target
 
@@ -67,7 +70,7 @@ export default function InfiniteKnob360({
       angleRange={angleRange}
       min={0}
       max={360}
-      multiRotation={true}
+      multiRotation
       onChange={onChange}
       onInteractiveChange={onKnobInteractiveChange}
       interactiveHook={interactiveHook}

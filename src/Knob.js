@@ -6,9 +6,10 @@ import { Scale } from './Scale'
 import { Value } from './Value'
 import { Range } from './Range'
 import { Spiral } from './Spiral'
+import { Label } from './Label'
 
 const isInternalComponent = ({ type }) =>
-    type === Arc || type === Pointer || type === Scale || type === Value || type === Range || type === Spiral
+    type === Arc || type === Pointer || type === Scale || type === Value || type === Range || type === Spiral || type === Label
 
 export const Knob = ({
     min,

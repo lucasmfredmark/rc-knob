@@ -5,6 +5,7 @@ import PointerExample from './examples/Pointer'
 import ScaleExample from './examples/Scale'
 import ArcExample from './examples/Arc'
 import ArcPointerExample from './examples/Arc_Pointer'
+import LabelExample from './examples/Label'
 import ArcPointerAnticlockwiseExample from './examples/Arc_Pointer_anticlockwise'
 import ScalePointerExample from './examples/Scale_Pointer'
 import ValueExample from './examples/Value'
@@ -49,6 +50,7 @@ export default () => {
                 <ArcExample />
                 <ScaleExample />
                 <ValueExample />
+                <LabelExample />
             </Grid>
             <H2>
                 <span>Combinations</span>

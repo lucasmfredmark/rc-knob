@@ -332,6 +332,36 @@ prop or any SVG element that is passed as a children.
     Width of the `rect` or the custom element. 
     Radius when type is set to `circle`.
 
+### `<Label/>`
+
+Label to display in the knob. In polar coordinates.
+
+#### Props
+
+- `label`
+
+    Label to display.
+
+- `radius`
+
+    Radius of the center of the label
+
+- `percentage`
+
+    Location of the label in percentage of the value range
+
+- `className`
+
+    Will be added to the SVG `text` element.
+
+- `style`
+
+    Will be added to the SVG `text` element.
+
+- `userSelect`
+
+    Added to the style. Default is `none` to avoid text selection.
+
 ### `<Scale/>`
 
 Renders a radial scale.

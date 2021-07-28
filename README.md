@@ -2,7 +2,7 @@
 
 Renders a react knob component that can be widely customised.
 
-![Few knobs](./side/resources/preview.png)
+![Few knobs](./docs/assets/preview.png)
 
 ## Installation
 ```

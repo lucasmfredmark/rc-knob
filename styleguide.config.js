@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
   title: 'rc-knob',
+  version: "1.1.0-dev",
   /*
   template: {
     favicon: 'docs/assets/favicon.ico'

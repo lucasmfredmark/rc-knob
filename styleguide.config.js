@@ -7,6 +7,7 @@ module.exports = {
     favicon: 'docs/assets/favicon.ico'
   },
   */
+  styleguideDir: "dist",
   sections: [
     {
       name: 'Knob',

@@ -16,11 +16,15 @@
     ],
     "scripts": {
         "prepublishOnly": "npm run release",
-        "release": "npm run build:dev && npm run build:prod",
+        "release:dev": "npm run build:dev",
+        "release": "npm run build:prod",
         "build:prod": "NODE_ENV=production rollup -c",
         "build:dev": "NODE_ENV=development rollup -c",
         "styleguide": "styleguidist server",
         "styleguide:build": "styleguidist build",
+        "site:serve": "styleguidist server",
+        "site:dist": "styleguidist build",
+        "site:deploy": "gh-pages -d dist",
         "test": "jest"
     },
     "author": {
@@ -45,6 +49,7 @@
         "enzyme": "^3.8.0",
         "enzyme-adapter-react-16": "^1.8.0",
         "enzyme-to-json": "^3.3.5",
+        "gh-pages": "^3.2.3",
         "jest": "^24.0.0",
         "react": ">=16.8.0",
         "react-dom": ">=16.8.0",

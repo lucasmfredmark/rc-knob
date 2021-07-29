@@ -150,7 +150,7 @@ function Marker({angle}) {
 
 ### Anticlockwise
 
-If `angleRange` is negative, the interaction anticlockwise.
+If `angleRange` is negative, the interaction is anticlockwise.
 
 ```jsx
 import React from 'react';

@@ -11,9 +11,12 @@ yarn add rc-knob
 ```
 
 ## Examples
-https://eskimoblood.github.io/rc-knob/
+
+- https://vallsv.github.io/rc-knob/
+- https://eskimoblood.github.io/rc-knob/ (older version)
 
 ## Usage
+
 The main idea is to split the user interaction and value calculation from the actual rendering of typical knob elements like pointer, scale or value. 
 So all logic is done in the [`Knob`](#Knob) component which is the root component. 
 

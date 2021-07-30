@@ -80,6 +80,7 @@ import colors from './assets/colors.js';
   angleOffset={220} 
   angleRange={280}
   steps={10}
+  snap={true}
   min={0}
   max={100}
   onChange={value => console.log(value)}
@@ -117,6 +118,7 @@ import colors from './assets/colors.js';
   angleOffset={220} 
   angleRange={280}
   steps={10}
+  snap={true}
   min={0}
   max={100}
   onChange={value => console.log(value)}

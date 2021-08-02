@@ -155,7 +155,6 @@ using polar coordinates.
 ```jsx
 import React from 'react';
 import { Knob, Range } from '../lib/index';
-import colors from './assets/colors.js';
 
 
 <Knob
@@ -166,21 +165,21 @@ import colors from './assets/colors.js';
   max={100}
   >
     <Range
-      arcWidth={5}
-      color={colors.primary}
+      arcWidth={10}
+      color="#e44b02"
       percentageFrom={0.0}
-      percentageTo={0.1}
+      percentageTo={0.5}
       />
     <Range
-      arcWidth={5}
-      color={colors.secondary}
-      percentageFrom={0.1}
-      percentageTo={0.9}
+      arcWidth={10}
+      color="#ffc90e"
+      percentageFrom={0.5}
+      percentageTo={0.75}
       />
     <Range
-      arcWidth={5}
-      color={colors.primary}
-      percentageFrom={0.9}
+      arcWidth={10}
+      color="#6caa03"
+      percentageFrom={0.75}
       percentageTo={1.0}
       />
 </Knob>;

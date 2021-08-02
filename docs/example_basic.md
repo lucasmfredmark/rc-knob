@@ -201,3 +201,45 @@ import { Knob, Range, Pointer, Scale } from '../lib/index';
     />
 </Knob>;
 ```
+
+### Value and triangle
+
+```jsx
+import React from 'react';
+import { Knob, Range, Pointer, Scale, Value } from '../lib/index';
+
+
+<Knob
+  size={100}
+  angleOffset={220}
+  angleRange={280}
+  min={0}
+  max={100}
+  value={10}
+  >
+    <Range
+      arcWidth={20}
+      color="#65bbf2"
+      percentageFrom={-0.04}
+      percentageTo={1.04}
+      />
+    <Pointer
+      width={25}
+      height={-20}
+      radius={55}
+      type="triangle"
+      color="white"
+    />
+    <Scale
+      steps={20}
+      tickWidth={1}
+      tickHeight={5}
+      radius={49}
+      color="#303030"
+      />
+    <Value
+      marginBottom={40}
+      className="value3"
+      />
+</Knob>;
+```

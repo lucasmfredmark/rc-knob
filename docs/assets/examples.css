@@ -14,6 +14,15 @@
 
 /*************************************/
 
+.value3 {
+  font-family: 'Work Sans', sans-serif;
+  fill: #65bbf2;
+  font-weight: bold;
+  font-size: 28px;
+}
+
+/*************************************/
+
 .styledKnob circle,
 .styledKnob path {
     fill: #fc5a96;

@@ -17,6 +17,13 @@ const PointerShape = ({ type, width, height, color, className }) => {
 				fill={color}
 				className={className}
 			/>)
+		case 'triangle':
+			const d = `M 0,0 L ${width/2},${height} L ${-width/2},${height} z`
+			return (<path
+				d={d}
+				fill={color}
+				className={className}
+			/>)
 	}
 }
 

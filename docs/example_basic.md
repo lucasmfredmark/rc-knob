@@ -145,3 +145,59 @@ import colors from './assets/colors.js';
   />
 </Knob>;
 ```
+
+### Range and needle
+
+```jsx
+import React from 'react';
+import { Knob, Range, Pointer, Scale } from '../lib/index';
+
+
+<Knob
+  size={100}
+  angleOffset={220}
+  angleRange={280}
+  min={0}
+  max={100}
+  value={10}
+  >
+    <Range
+      arcWidth={20}
+      color="#e44b02"
+      percentageFrom={0.0}
+      percentageTo={0.5}
+      />
+    <Range
+      arcWidth={20}
+      color="#ffc90e"
+      percentageFrom={0.5}
+      percentageTo={0.75}
+      />
+    <Range
+      arcWidth={20}
+      color="#6caa03"
+      percentageFrom={0.75}
+      percentageTo={1.0}
+      />
+    <Scale
+      steps={20}
+      tickWidth={1}
+      tickHeight={5}
+      radius={49}
+      color="#303030"
+      />
+    <circle
+      r="3.5"
+      cx="50"
+      cy="50"
+      fill="black"
+      />
+    <Pointer
+      width={5}
+      height={45}
+      radius={2}
+      type="triangle"
+      color="black"
+    />
+</Knob>;
+```

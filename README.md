@@ -157,19 +157,19 @@ Renders a spiral between 2 angles.
 ### `<Pointer/>`
 
 Pointer of the knob.
-Can be either be a SVG `rect` or `circle` depending on the passed `type`
-prop or any SVG element that is passed as a children.
+Can be either be a `rect`, `circle` or `triangle` depending on the
+passed `type` prop or any SVG element that is passed as a children.
 
 #### Props
 
 | Prop | Description |
 |------|-------------|
 | `children` | Can be any SVG element or a component that will render a SVG element. If you pass a component the percentage of the current value will be passed as a prop. The element will be rendered as pointer. Note, that you have to pass `width` and `height` as props to make calculate the correct position.
-| `className` | Will be added to the `rect`, `circle` or the children.
+| `className` | Will be added to the predefined shape or the children.
 | `color` | Color of the pointer.
 | `height` | Height of the `rect` or the custom element. Will be ignored for circle. Will be the same as `width` if not set.
 | `radius` | Outer radius of the circle the pointer sits on.
-| `type` | Can be `rect` or `circle`. Will render the according SVG element. `width` and|or `height` props needs to be set.
+| `type` | Can be `rect`, `circle` or `triangle`. Will render the according SVG element. `width` and/or `height` props needs to be set.
 | `width` | Width of the `rect` or the custom element. Radius when type is set to `circle`.
 
 ### `<Label/>`

@@ -4,7 +4,9 @@ The display part of the knob is splitted into the `Pointer`, `Scale`, `Arc`,
 
 ## `Pointer`
 
-This component displays the location og the knob.
+This component displays the location of the knob.
+
+Three shapes are available `circle`, `rect`, `triangle`.
 
 ```js
 import React from 'react';

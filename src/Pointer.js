@@ -35,17 +35,26 @@ export const Pointer = ({
 	angleOffset,
 	angleRange,
 	percentage,
+	useRotation=true,
 	radius,
 	center,
 	type,
 	color,
 	className,
-}) => (
+}) => {
+	let transform
+	if (useRotation) {
+		transform = `rotate(${angleOffset + angleRange * percentage} ${center} ${center})
+					translate( ${center} ${center - radius - height})`
+	} else {
+		const angle = (angleOffset + angleRange * percentage - 90) * Math.PI / 180
+		const x = center + radius * Math.cos(angle)
+		const y = center + radius * Math.sin(angle)
+		transform = `translate(${x} ${y})`
+	}
+	return (
 	<g
-		transform={`
-        rotate(${angleOffset + angleRange * percentage} ${center} ${center})
-        translate( ${center} ${center - radius - height})
-        `}
+		transform={transform}
 	>
 		{children &&
 			React.Children.map(children, child =>
@@ -63,4 +72,4 @@ export const Pointer = ({
 			className={className}
 		/>)}
 	</g>
-)
+)}

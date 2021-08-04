@@ -50,8 +50,8 @@ export const Pointer = ({
 		{children &&
 			React.Children.map(children, child =>
 				React.cloneElement(child, {
-					width,
-					height,
+					width: (width || 0),
+					height: (height || 0),
 					percentage,
 				})
 			)}

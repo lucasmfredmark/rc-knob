@@ -38,6 +38,10 @@ module.exports = {
           content: 'docs/example_custom.md'
         },
         {
+          name: 'Gradient',
+          content: 'docs/example_gradient.md'
+        },
+        {
           name: 'Async',
           content: 'docs/example_async.md'
         },

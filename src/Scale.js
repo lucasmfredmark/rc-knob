@@ -121,6 +121,8 @@ export const Scale = ({
                   activeColor,
                   className,
                   activeClassName,
+                  steps,
+                  percentage
               })
     return <g>{Array.from({ length }, renderFn)}</g>
 }

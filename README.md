@@ -231,6 +231,8 @@ The function will get the following props passed:
 - `translateX`
 - `translateY`
 - `tickWidth`
+- `percentage`
+- `steps`
 
 Most of them are just passed down from the [`Pointer`](#Pointer) or the
 [`Knob`](#Knob). 

@@ -6,6 +6,8 @@ const pointOnCircle = (center, radius, angle) => ({
 })
 const degTorad = deg => (Math.PI * deg) / 180
 
+const clampDeg = deg => (deg >= 360) ? 359.999 : (deg <= -360 ? -359.999 : deg)
+
 const calcPath = ({
     percentageFrom,
     percentageTo,
@@ -16,12 +18,13 @@ const calcPath = ({
     center,
 }) => {
     const angle = angleRange * (percentageTo - percentageFrom)
+    const clampedAngle = clampDeg(angle)
     const angleFrom = angleOffset - 90 + angleRange * percentageFrom
     const innerRadius = outerRadius - arcWidth
     const angleFromRad = degTorad(angleFrom)
-    const angleToRad = degTorad(angleFrom + angle)
-    const largeArcFlag = Math.abs(angle) < 180 ? 0 : 1
-    const direction = angle >= 0 ? 1 : 0
+    const angleToRad = degTorad(angleFrom + clampedAngle)
+    const largeArcFlag = Math.abs(clampedAngle) < 180 ? 0 : 1
+    const direction = clampedAngle >= 0 ? 1 : 0
 
     const p1 = pointOnCircle(center, outerRadius, angleFromRad)
     const p2 = pointOnCircle(center, outerRadius, angleToRad)
@@ -58,12 +61,6 @@ export const Range = ({
         pfrom = 0
         pto = percentage
     }
-    // Clamp
-    if (Math.abs(pto - pfrom) >= 1) {
-        pfrom = 0
-        pto = 0.9999
-    }
-
     const d = calcPath({percentageFrom:pfrom, percentageTo:pto, ...props})
     return (<g>
         <path d={d} style={{ fill: color }} />
